@@ -1,6 +1,3 @@
 #include "basemodule.h"
 
-BaseModule::BaseModule()
-{
-
-}
+BaseRegistry::map_type* BaseRegistry::map = NULL;
