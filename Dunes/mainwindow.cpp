@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "downloadmodule.h"
+#include "modulelistitem.h"
+#include "scopemodule.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -8,11 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Module list
     m_modList = new QListWidget(this);
     m_modList->resize(320, 360);
-    //Add item to list
-    m_modList->addItem("Select something");
-    m_modList->item(m_modList->count() - 1)->setToolTip("This is my description!");
-    m_modList->addItem("LOOP");
-    m_modList->item(m_modList->count() - 1)->setToolTip("This is a loop description");
+
+    DownloadModule::setUp(m_modList);
+    ScopeModule::setUp(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!", this);
@@ -39,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::update_desc()
 {
-   m_desc->setText(m_modList->currentItem()->toolTip());
+   m_desc->setText(((ModuleListItem*)m_modList->currentItem())->getDescription());
 }
 
 void MainWindow::update_tree()
