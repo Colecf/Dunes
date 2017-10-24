@@ -2,12 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QListWidget>
-#include <QTableWidget>
 #include <QTextEdit>
-#include <QTreeWidget>
+#include <QDebug>
+#include <QListWidget>
 
-#include "basemodule.h"
+#include "blockarea.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,20 +16,17 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = 0);
-
-    void initModule(BaseModule* module);
+    explicit MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
 private slots:
-    void update_desc();
-    void update_tree();
-    void remove_entry_from_tree();
+    void updateDesc();
+    void makeBlock(QListWidgetItem* blockItem);
+
 private:
     QListWidget* m_modList;
-    QTableWidget *m_descTable;
     QTextEdit *m_desc;
-    QTreeWidget *m_tree;
+    BlockArea *m_blockarea;
 };
 
 #endif // MAINWINDOW_H

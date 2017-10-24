@@ -13,5 +13,10 @@ QString ModuleListItem::getDescription()
 
 BaseModule* ModuleListItem::makeBlock()
 {
-    return BaseRegistry::createType(type);
+    return BaseRegistry::createInstance(type);
+}
+
+ModuleType ModuleListItem::getType()
+{
+    return type;
 }

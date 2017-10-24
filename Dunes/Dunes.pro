@@ -26,16 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    basemodule.cpp \
-    modulelistitem.cpp \
-    downloadmodule.cpp \
-    scopemodule.cpp
+        basemodule.cpp \
+        modulelistitem.cpp \
+        downloadmodule.cpp \
+        scopemodule.cpp \
+    blockarea.cpp
 
 HEADERS += \
         mainwindow.h \
     basemodule.h \
     modulelistitem.h \
     downloadmodule.h \
-    scopemodule.h
+    scopemodule.h \
+    blockarea.h
 
 FORMS +=

@@ -13,6 +13,7 @@ public:
     QString getDescription();
 
     BaseModule* makeBlock();
+    ModuleType getType();
 
 private:
     QString description;

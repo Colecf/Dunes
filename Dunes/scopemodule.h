@@ -10,6 +10,8 @@ public:
     static void setUp(QListWidget*);
     const static ModuleType type = ModuleScope;
 
+    const static QString title;
+    const static QString description;
 private:
 };
 

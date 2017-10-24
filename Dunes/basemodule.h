@@ -2,6 +2,8 @@
 #define BASEMODULE_H
 #include <map>
 #include <string>
+#include <QString>
+#include <QPushButton>
 
 enum ModuleType {
     ModuleError,
@@ -10,12 +12,13 @@ enum ModuleType {
     ModuleScope
 };
 
-class BaseModule
+class BaseModule : public QPushButton
 {
 public:
 
     const static ModuleType type = ModuleError;
-
+    const static QString title;
+    const static QString description;
 private:
 };
 
@@ -28,7 +31,7 @@ public:
     static void registerType(ModuleType t, BaseModule* (*creationFunc)()) {
         map.insert(std::make_pair(t, creationFunc));
     }
-    static BaseModule* createType(ModuleType t) {
+    static BaseModule* createInstance(ModuleType t) {
         if(map.count(t) > 0) {
             return map.at(t)();
         }
