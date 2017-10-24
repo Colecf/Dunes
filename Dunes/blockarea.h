@@ -2,6 +2,7 @@
 #define BLOCKAREA_H
 #include<string>
 #include<QWidget>
+#include <QVBoxLayout>
 
 #include <basemodule.h>
 
@@ -12,7 +13,8 @@ public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(const QString &);
 
-signals:
+private:
+    QVBoxLayout* m_layout;
 };
 
 #endif // BLOCKAREA_H
