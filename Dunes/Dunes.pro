@@ -27,11 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     scope.cpp \
-    basemodule.cpp
+    basemodule.cpp \
+    blockarea.cpp \
+    blocklist.cpp
 
 HEADERS += \
         mainwindow.h \
     basemodule.h \
-    scope.h
+    scope.h \
+    blockarea.h \
+    blocklist.h
 
 FORMS +=

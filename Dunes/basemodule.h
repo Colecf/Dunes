@@ -2,8 +2,10 @@
 #define BASEMODULE_H
 #include <map>
 #include <string>
+#include <QString>
+#include <QPushButton>
 
-class BaseModule
+class BaseModule : public QPushButton
 {
 };
 
@@ -11,8 +13,9 @@ template<typename T> BaseModule* createT() { return new T; }
 
 class BaseRegistry
 {
-    using map_type = std::map<std::string, BaseModule*(*)()>;
-    static BaseModule* createInstance(std::string const& s) {
+    using map_type = std::map<QString, BaseModule*(*)()>;
+public:
+    static BaseModule* createInstance(QString const& s) {
         map_type::iterator it = getMap()->find(s);
         if(it == getMap()->end())
             return nullptr;
@@ -31,7 +34,7 @@ private:
 
 template<typename T>
 struct DerivedRegister : BaseRegistry {
-    DerivedRegister(std::string const& s) {
+    DerivedRegister(QString const& s) {
         getMap()->insert(std::make_pair(s, &createT<T>));
     }
 };
