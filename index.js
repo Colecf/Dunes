@@ -7,9 +7,7 @@ var fs = require('fs');
 var stack = [];
 const output_script = "dunes.csv";
 if(fs.existsSync(output_script)){
-	const fd = fs.openSync('dunes.csv', 'r+');
-	fs.ftruncateSync(fd, 0);
-	fs.closeSync(fd);
+	fs.truncateSync(output_script, 0);
 }
 
 function top(){
