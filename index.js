@@ -52,6 +52,9 @@ function get_text(html){
 }
 
 function add_row(){
+	// Jank way of getting rid of trailing comma
+	var data = fs.readFileSync(output_script);
+	fs.truncateSync(output_script, data.length-1);
 	fs.appendFileSync(output_script, '\n');
 }
 
