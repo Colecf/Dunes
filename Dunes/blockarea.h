@@ -12,7 +12,7 @@ class BlockArea : public QWidget
 public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
-
+    QVBoxLayout* getLayout();
 private:
     QVBoxLayout* m_layout;
 };
