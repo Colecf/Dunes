@@ -1,3 +1,4 @@
 *.user
 build*/
 node_modules
+*.csv
