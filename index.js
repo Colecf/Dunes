@@ -6,6 +6,11 @@ var fs = require('fs');
 
 var stack = [];
 const output_script = "dunes.csv";
+if(fs.existsSync(output_script)){
+	const fd = fs.openSync('dunes.csv', 'r+');
+	fs.ftruncateSync(fd, 0);
+	fs.closeSync(fd);
+}
 
 function top(){
 	return stack[stack.length-1];
@@ -67,6 +72,7 @@ function constant(data){
 	stack.push(data);
 }
 
+// Diagram:
 // DL first team
 // Scope
 // 	constant year
@@ -160,7 +166,7 @@ get_page('https://www.basketball-reference.com/teams/SAS/1980.html')
 		return get_text(top());
 	})
 	.then(function(res){
-		add_column(top())
+		add_column(top());
 	})
 	.then(function(){
 		pop();
