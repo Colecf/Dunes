@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //m_blockarea->resize(640, 540);
     //m_blockarea->createBlock("Scope");
    // m_blockarea->getLayout()->setAlignment(Qt::AlignLeft);
+
     //Configuration panel change later
     QRadioButton *button = new QRadioButton();
     QRadioButton *button1 = new QRadioButton();
@@ -35,8 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //Layout System
     //Box is a layout that holds all layouts
     box = new QBoxLayout(QBoxLayout::LeftToRight);
+
     //Left layout. Module list + description
     left_layout = new QVBoxLayout();
+    //m_modList->setSizePolicy(QSizePolicy::Minimum);
     left_layout->addWidget(m_modList);
     left_layout->addWidget(m_desc);
     left_layout->setAlignment(m_modList, Qt::AlignLeft);
@@ -46,10 +49,15 @@ MainWindow::MainWindow(QWidget *parent) :
     right_layout = new QBoxLayout(QBoxLayout::TopToBottom);
     right_layout->addWidget(button);
     right_layout->addWidget(button1);
-    right_layout->setAlignment(Qt::AlignRight);
+    right_layout->setAlignment(Qt::AlignTop);
+
     box->addLayout(left_layout);
     box->addLayout(m_blockarea->getLayout());
+    box->setStretchFactor(m_blockarea->getLayout(), 2);
     box->addLayout(right_layout);
+    //box->setStretchFactor(left_layout, 1);
+    //box->setStretchFactor(right_layout, 0);
+
     //layout->setAlignment(m_blockarea->getLayout(), Qt::AlignHCenter);
 
     //this->setLayout(layout);
