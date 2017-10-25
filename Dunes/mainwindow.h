@@ -5,7 +5,9 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QListWidget>
-
+#include <QVBoxLayout>
+#include <QBoxLayout>
+#include <QRadioButton>
 #include "blockarea.h"
 
 namespace Ui {
@@ -27,6 +29,9 @@ private:
     QListWidget* m_modList;
     QTextEdit *m_desc;
     BlockArea *m_blockarea;
+    QVBoxLayout *left_layout;
+    QBoxLayout *right_layout;
+    QBoxLayout *box;
 };
 
 #endif // MAINWINDOW_H
