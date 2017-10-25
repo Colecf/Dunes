@@ -56,7 +56,7 @@ function add_row(){
 }
 
 function add_column(data){
-	fs.appendFileSync(output_script, data + ',');
+	fs.appendFileSync(output_script, '"' + data.replace(/"/g, '""') + '",');
 }
 
 function scope(){
@@ -131,7 +131,7 @@ get_page('https://www.basketball-reference.com/teams/SAS/1980.html')
 		return get_text(top());
 	})
 	.then(function(res){
-		add_column(top())
+		add_column(top());
 	})
 	.then(function(){
 		pop();
