@@ -1,6 +1,6 @@
 #ifndef SCOPE_H
 #define SCOPE_H
-#include <basemodule.h>
+#include "basemodule.h"
 #include "QListWidget"
 class ScopeModule : public BaseModule
 {

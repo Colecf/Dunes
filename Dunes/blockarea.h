@@ -4,7 +4,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 
-#include "basemodule.h"
+#include "modules/basemodule.h"
 
 class BlockArea : public QScrollArea
 {

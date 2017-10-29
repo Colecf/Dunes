@@ -1,9 +1,8 @@
 #include "mainwindow.h"
 //#include "ui_mainwindow.h"
-#include "downloadmodule.h"
+#include "modules/downloadmodule.h"
+#include "modules/scopemodule.h"
 #include "modulelistitem.h"
-#include "scopemodule.h"
-#include "basemodule.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)

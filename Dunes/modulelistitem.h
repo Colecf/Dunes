@@ -4,7 +4,7 @@
 #include <QString>
 
 #include "QListWidgetItem"
-#include "basemodule.h"
+#include "modules/basemodule.h"
 
 class ModuleListItem : public QListWidgetItem
 {
