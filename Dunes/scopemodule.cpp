@@ -6,5 +6,5 @@ const QString ScopeModule::description = "Scope Description";
 
 ScopeModule::ScopeModule()
 {
-    setText("Scope");
+    m_titleLabel->setText(title);
 }

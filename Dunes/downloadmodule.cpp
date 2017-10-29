@@ -6,5 +6,5 @@ const QString DownloadModule::description = "Download Description";
 
 DownloadModule::DownloadModule()
 {
-    setText("Download");
+    m_titleLabel->setText(title);
 }

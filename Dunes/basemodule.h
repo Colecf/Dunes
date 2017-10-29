@@ -5,6 +5,8 @@
 #include <QString>
 #include <QPushButton>
 #include <QListWidget>
+#include <QLabel>
+#include <QGridLayout>
 
 enum ModuleType {
     ModuleError,
@@ -35,9 +37,11 @@ private:
     static map_type map;
 };
 
-class BaseModule : public QPushButton
+class BaseModule : public QWidget
 {
 public:
+    BaseModule();
+    ~BaseModule();
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
     // a circular header inclusion I implmented createModuleListItem in the cpp
@@ -48,6 +52,10 @@ public:
     const static ModuleType type = ModuleError;
     const static QString title;
     const static QString description;
+
+protected:
+    QLabel* m_titleLabel;
+    QGridLayout* m_layout;
 private:
     static void createModuleListItem(QListWidget* list, QString title, QString description, ModuleType type);
 };
