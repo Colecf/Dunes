@@ -53,11 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
     right_layout->setAlignment(Qt::AlignTop);
 
     box->addLayout(left_layout);
-    box->addLayout(m_blockarea->getLayout());
-    box->setStretchFactor(m_blockarea->getLayout(), 2);
+    box->addWidget(m_blockarea);
     box->addLayout(right_layout);
-    //box->setStretchFactor(left_layout, 1);
-    //box->setStretchFactor(right_layout, 0);
 
     //layout->setAlignment(m_blockarea->getLayout(), Qt::AlignHCenter);
 

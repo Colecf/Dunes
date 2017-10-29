@@ -1,12 +1,12 @@
 #ifndef BLOCKAREA_H
 #define BLOCKAREA_H
-#include<string>
-#include<QWidget>
+#include <QWidget>
+#include <QScrollArea>
 #include <QVBoxLayout>
 
 #include "basemodule.h"
 
-class BlockArea : public QWidget
+class BlockArea : public QScrollArea
 {
     Q_OBJECT
 public:
