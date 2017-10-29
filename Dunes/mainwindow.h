@@ -30,7 +30,7 @@ private:
     QTextEdit *m_desc;
     BlockArea *m_blockarea;
     QVBoxLayout *left_layout;
-    QBoxLayout *right_layout;
+    QWidget *right_layout;
     QBoxLayout *box;
 };
 

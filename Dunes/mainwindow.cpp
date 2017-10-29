@@ -29,10 +29,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //m_blockarea->createBlock("Scope");
    // m_blockarea->getLayout()->setAlignment(Qt::AlignLeft);
 
-    //Configuration panel change later
-    QRadioButton *button = new QRadioButton();
-    QRadioButton *button1 = new QRadioButton();
-    button1->setText("testing");
     //Layout System
     //Box is a layout that holds all layouts
     box = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -46,14 +42,12 @@ MainWindow::MainWindow(QWidget *parent) :
     left_layout->setAlignment(m_desc, Qt::AlignLeft);
 
     //Configuration layout
-    right_layout = new QBoxLayout(QBoxLayout::TopToBottom);
-    right_layout->addWidget(button);
-    right_layout->addWidget(button1);
-    right_layout->setAlignment(Qt::AlignTop);
-
+    right_layout = new QWidget();
+    right_layout->setObjectName("optionsPanel");
     box->addLayout(left_layout);
     box->addWidget(m_blockarea);
-    box->addLayout(right_layout);
+    box->addWidget(right_layout);
+
 
     //layout->setAlignment(m_blockarea->getLayout(), Qt::AlignHCenter);
 
@@ -64,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //test->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     this->setCentralWidget(test);
     test->setLayout(box);
+
+    BaseModule::mainWindow = test;
 
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
 }

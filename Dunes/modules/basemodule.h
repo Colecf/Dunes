@@ -6,7 +6,8 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <QLabel>
-#include <QGridLayout>
+#include <QMouseEvent>
+#include <QBoxLayout>
 
 enum ModuleType {
     ModuleError,
@@ -42,6 +43,9 @@ class BaseModule : public QWidget
 public:
     BaseModule();
     ~BaseModule();
+
+    virtual void mousePressEvent(QMouseEvent*) override;
+
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
     // a circular header inclusion I implmented createModuleListItem in the cpp
@@ -52,10 +56,12 @@ public:
     const static ModuleType type = ModuleError;
     const static QString title;
     const static QString description;
+    static QWidget* mainWindow;
 
 protected:
     QLabel* m_titleLabel;
     QGridLayout* m_layout;
+    QWidget* m_optionsPanel;
 private:
     static void createModuleListItem(QListWidget* list, QString title, QString description, ModuleType type);
 };
