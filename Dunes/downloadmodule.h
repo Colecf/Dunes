@@ -9,9 +9,6 @@ class DownloadModule : public BaseModule
 public:
     DownloadModule();
 
-
-    static void setUp(QListWidget*);
-
     const static ModuleType type = ModuleDL;
 
     const static QString title;

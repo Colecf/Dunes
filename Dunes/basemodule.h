@@ -4,6 +4,7 @@
 #include <string>
 #include <QString>
 #include <QPushButton>
+#include <QListWidget>
 
 enum ModuleType {
     ModuleError,
@@ -12,15 +13,7 @@ enum ModuleType {
     ModuleScope
 };
 
-class BaseModule : public QPushButton
-{
-public:
-
-    const static ModuleType type = ModuleError;
-    const static QString title;
-    const static QString description;
-private:
-};
+class BaseModule;
 
 template<typename T> BaseModule* createT() { return new T; }
 
@@ -40,6 +33,23 @@ public:
 
 private:
     static map_type map;
+};
+
+class BaseModule : public QPushButton
+{
+public:
+    // Sets up the module list item
+    // templated static functions must be defined in the header, but to prevent
+    // a circular header inclusion I implmented createModuleListItem in the cpp
+    template<typename T> static void setUp(QListWidget* list) {
+        createModuleListItem(list, T::title, T::description, T::type);
+        BaseRegistry::registerType(T::type, &createT<T>);
+    }
+    const static ModuleType type = ModuleError;
+    const static QString title;
+    const static QString description;
+private:
+    static void createModuleListItem(QListWidget* list, QString title, QString description, ModuleType type);
 };
 
 #endif // BASEMODULE_H

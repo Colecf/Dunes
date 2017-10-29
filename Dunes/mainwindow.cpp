@@ -3,6 +3,7 @@
 #include "downloadmodule.h"
 #include "modulelistitem.h"
 #include "scopemodule.h"
+#include "basemodule.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -12,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_modList = new QListWidget();
    // m_modList->resize(320, 360);
 
-    DownloadModule::setUp(m_modList);
-    ScopeModule::setUp(m_modList);
+    BaseModule::setUp<DownloadModule>(m_modList);
+    BaseModule::setUp<ScopeModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");

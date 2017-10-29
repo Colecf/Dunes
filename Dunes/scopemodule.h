@@ -7,7 +7,6 @@ class ScopeModule : public BaseModule
 public:
     ScopeModule();
 
-    static void setUp(QListWidget*);
     const static ModuleType type = ModuleScope;
 
     const static QString title;
