@@ -2,12 +2,14 @@
 #define BLOCKAREA_H
 #include <QWidget>
 #include <QScrollArea>
-#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QDrag>
 #include <QMimeData>
 #include <QListWidgetItem>
 #include "modulelistitem.h"
 #include "modules/basemodule.h"
+#include "modules/scopemodule.h"
 #include "modulelist.h"
 class BlockArea : public QScrollArea
 {
@@ -15,11 +17,13 @@ class BlockArea : public QScrollArea
 public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
-    QVBoxLayout* getLayout();
+    QGridLayout* getLayout();
 private:
-    QVBoxLayout* m_layout;
+    QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    int moduleCount;
+    int colCount;
 };
 
 #endif // BLOCKAREA_H
