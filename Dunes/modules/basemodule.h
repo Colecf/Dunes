@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QBoxLayout>
-
+#include "../modulelist.h"
 enum ModuleType {
     ModuleError,
     ModuleDL,
@@ -45,11 +45,13 @@ public:
     ~BaseModule();
 
     virtual void mousePressEvent(QMouseEvent*) override;
+    //void dragEnterEvent(QDragEnterEvent *event);
+    //void dropEvent(QDropEvent *event);
 
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
     // a circular header inclusion I implmented createModuleListItem in the cpp
-    template<typename T> static void setUp(QListWidget* list) {
+    template<typename T> static void setUp(ModuleList* list) {
         createModuleListItem(list, T::title, T::description, T::type);
         BaseRegistry::registerType(T::type, &createT<T>);
     }
@@ -63,7 +65,7 @@ protected:
     QGridLayout* m_layout;
     QWidget* m_optionsPanel;
 private:
-    static void createModuleListItem(QListWidget* list, QString title, QString description, ModuleType type);
+    static void createModuleListItem(ModuleList* list, QString title, QString description, ModuleType type);
 };
 
 #endif // BASEMODULE_H

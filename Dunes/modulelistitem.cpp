@@ -4,6 +4,7 @@ ModuleListItem::ModuleListItem(QString title, QString desc, ModuleType t) : desc
 {
     setText(title);
     setToolTip(title);
+
 }
 
 QString ModuleListItem::getDescription()

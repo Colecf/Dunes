@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     //Initilize UI
     //Module list
-    m_modList = new QListWidget();
+    m_modList = new ModuleList(this);
    // m_modList->resize(320, 360);
 
     BaseModule::setUp<DownloadModule>(m_modList);
@@ -73,6 +73,7 @@ void MainWindow::makeBlock(QListWidgetItem* blockItem)
 {
     m_blockarea->createBlock(((ModuleListItem*)blockItem)->getType());
 }
+
 
 MainWindow::~MainWindow()
 {

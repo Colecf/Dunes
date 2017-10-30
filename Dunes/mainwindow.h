@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QBoxLayout>
 #include <QRadioButton>
+#include "modulelist.h"
 #include "blockarea.h"
 
 namespace Ui {
@@ -26,7 +27,7 @@ private slots:
     void makeBlock(QListWidgetItem* blockItem);
 
 private:
-    QListWidget* m_modList;
+    ModuleList* m_modList;
     QTextEdit *m_desc;
     BlockArea *m_blockarea;
     QVBoxLayout *left_layout;

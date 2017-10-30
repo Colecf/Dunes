@@ -1,6 +1,6 @@
 #include "basemodule.h"
 #include "modulelistitem.h"
-
+#include "modulelist.h"
 BaseRegistry::map_type BaseRegistry::map;
 
 const QString BaseModule::title = "Base";
@@ -48,6 +48,27 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void BaseModule::createModuleListItem(QListWidget* list, QString title, QString description, ModuleType type) {
+/*  IN PROGRESS: INSERT FROM MODLIST INTO BLOCKAREA ANYWHERE
+ * void BaseModule::dragEnterEvent(QDragEnterEvent *event)
+{
+    //if (event->mimeData()->hasFormat("text/plain"))
+            event->acceptProposedAction();
+}
+
+void BaseModule::dropEvent(QDropEvent *event)
+{
+    //textBrowser->setPlainText(event->mimeData()->text());
+    //mimeTypeCombo->clear();
+   //mimeTypeCombo->addItems(event->mimeData()->formats());
+   const QMimeData* itemData = event->mimeData();
+
+    //qInfo() << event->mimeData()->text();
+    //qInfo() << ((PassData*)test)->getQListWidgetItem()->text();
+    QListWidgetItem *block = ((PassData*)itemData)->getQListWidgetItem();
+    qInfo() << ((ModuleListItem*)block)->getType();
+    createBlock((((ModuleListItem*)block)->getType()));
+    event->acceptProposedAction();
+}*/
+void BaseModule::createModuleListItem(ModuleList* list, QString title, QString description, ModuleType type) {
     list->addItem(new ModuleListItem(title, description, type));
 }

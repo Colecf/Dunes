@@ -1,5 +1,6 @@
 #include "blockarea.h"
-
+//Remove QDebug later
+#include <QDebug>
 BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 {
     QWidget* widget = new QWidget;
@@ -8,6 +9,8 @@ BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
     widget->setLayout(m_layout);
     setWidget(widget);
     setWidgetResizable(true);
+
+    setAcceptDrops(true);
 }
 
 bool BlockArea::createBlock(ModuleType blockType)
@@ -20,4 +23,25 @@ bool BlockArea::createBlock(ModuleType blockType)
 QVBoxLayout* BlockArea::getLayout()
 {
     return m_layout;
+}
+
+void BlockArea::dragEnterEvent(QDragEnterEvent *event)
+{
+    //if (event->mimeData()->hasFormat("text/plain"))
+            event->acceptProposedAction();
+}
+
+void BlockArea::dropEvent(QDropEvent *event)
+{
+    //textBrowser->setPlainText(event->mimeData()->text());
+    //mimeTypeCombo->clear();
+   //mimeTypeCombo->addItems(event->mimeData()->formats());
+   const QMimeData* itemData = event->mimeData();
+
+    //qInfo() << event->mimeData()->text();
+    //qInfo() << ((PassData*)test)->getQListWidgetItem()->text();
+
+    QListWidgetItem *block = ((PassData*)itemData)->getQListWidgetItem();
+    createBlock((((ModuleListItem*)block)->getType()));
+    event->acceptProposedAction();
 }
