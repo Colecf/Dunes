@@ -1,6 +1,5 @@
 var cheerio = require('cheerio');
-var request = require('request');
-var rp = require('request-promise');
+var request = require('sync-request');
 var fs = require('fs');
 
 
@@ -22,37 +21,38 @@ function pop(){
 }
 
 function get_page(url){
-	return rp(url)
-		.then(function(body){
-			if(stack.length > 0){
-				pop();
-			}
-			stack.push(body);
-			return body;
-		})
-		.catch(function(err){
-			console.error("get request failed: ", err);
-		});
+	if(stack.length > 0){
+		pop();
+	}	stack.push(request('GET', url).getBody());
 }
 
-function select_by_css(html, css){
+function children(query, css){
+	var $ = query;
+	var html = "";
+	$(css).contents().each(function(i, elem){
+		html += $.html(this);
+	});
+	return html;
+}
+
+function select_by_css(html, css, get_children=false){
 	var $ = cheerio.load(html);
 	pop();
-	var ret = $.html(css);
-	stack.push(ret);
-	return ret;
+	if(get_children){
+		stack.push(children($, css));
+	}
+	else{
+		stack.push($.html(css));
+	}
 }
-
 function get_text(html){
 	var $ = cheerio.load(html);
 	pop();
-	var ret = $(html).text();
+	var ret = $(html).first().text();
 	stack.push(ret);
-	return ret;
 }
 
 function add_row(){
-	// Jank way of getting rid of trailing comma
 	var data = fs.readFileSync(output_script);
 	fs.truncateSync(output_script, data.length-1);
 	fs.appendFileSync(output_script, '\n');
@@ -72,6 +72,60 @@ function constant(data){
 	}
 	stack.push(data);
 }
+
+function attribute(attribute){
+	var $ = cheerio.load(pop());
+	stack.push($("*").first().attr(attribute));
+}
+
+function next(){
+	var $ = cheerio.load(top());
+	pop();
+	var html = "";
+	$("*").first().nextAll().each(function(i, elem){
+		html += $.html(this);
+	});
+	stack.push(html);
+}
+
+constant("https://www.basketball-reference.com/leagues/NBA_1980.html")
+get_page(top());
+select_by_css(top(), "#divs_standings_E");
+select_by_css(top(), "tr.full_table", true);
+scope();
+constant("team");
+add_column(top());
+constant("wins");
+add_column(top());
+constant("losses");
+add_column(top());
+constant("W/L%");
+add_column(top());
+constant("GB");
+add_column(top());
+constant("PS/G");
+add_column(top());
+constant("PA/G");
+add_column(top());
+constant("SRS");
+add_column(top());
+add_row();
+pop();
+while(top() != ""){
+	scope();
+	get_text(top());
+	add_column(top());
+	pop();
+	scope();
+	attribute("data-stat")
+	if(top() === "srs"){
+		add_row();
+	}
+	pop();
+	next();
+}
+
+
 
 // Diagram:
 // DL first team
@@ -102,88 +156,34 @@ function constant(data){
 // 	add row
 
 // Example output:
-get_page('https://www.basketball-reference.com/teams/SAS/1980.html')
-	.then(function(){
-		scope();
-	})
-	.then(function(){
-		constant("year");
-	})
-	.then(function(){
-		add_column(top());
-	})
-	.then(function(){
-		constant("team");
-	})
-	.then(function(){
-		add_column(top());
-	})
-	.then(function(){
-		add_row();
-	})
-	.then(function(){
-		pop();
-	})
-	.then(function(){
-		scope();
-	})
-	.then(function(){
-		return select_by_css(top(), "h1[itemprop='name'] span:nth-child(1)");
-	})
-	.then(function(res){
-		return get_text(top());
-	})
-	.then(function(res){
-		add_column(top());
-	})
-	.then(function(){
-		pop();
-	})
-	.then(function(){
-		return select_by_css(top(), "h1[itemprop='name'] span:nth-child(2)");
-	})
-	.then(function(){
-		return get_text(top());
-	})
-	.then(function(){
-		add_column(top());
-	})
-	.then(function(){
-		add_row();
-	})
-	.then(function(){
-		pop();
-	})
-	.then(function(){
-		return get_page('https://www.basketball-reference.com/teams/LAL/1980.html')
-	})
-	.then(function(){
-		scope();
-	})
-	.then(function(){
-		return select_by_css(top(), "h1[itemprop='name'] span:nth-child(1)");
-	})
-	.then(function(res){
-		return get_text(top());
-	})
-	.then(function(res){
-		add_column(top());
-	})
-	.then(function(){
-		pop();
-	})
-	.then(function(){
-		return select_by_css(top(), "h1[itemprop='name'] span:nth-child(2)");
-	})
-	.then(function(){
-		return get_text(top());
-	})
-	.then(function(){
-		add_column(top());
-	})
-	.then(function(){
-		add_row();
-	})
-	.then(function(){
-		pop();
-	})
+// constant("https://www.basketball-reference.com/teams/SAS/1980.html")
+// get_page(top());
+// scope();
+// constant("year");
+// add_column(top());
+// constant("team");
+// add_column(top());
+// add_row();
+// pop();
+// scope();
+// select_by_css(top(), "h1[itemprop='name'] span:nth-child(1)");
+// get_text(top());
+// add_column(top());
+// pop();
+// select_by_css(top(), "h1[itemprop='name'] span:nth-child(2)");
+// get_text(top());
+// add_column(top());
+// add_row();
+// pop();
+// constant('https://www.basketball-reference.com/teams/LAL/1980.html');
+// get_page(top());
+// scope();
+// select_by_css(top(), "h1[itemprop='name'] span:nth-child(1)");
+// get_text(top());
+// add_column(top());
+// pop();
+// select_by_css(top(), "h1[itemprop='name'] span:nth-child(2)");
+// get_text(top());
+// add_column(top());
+// add_row();
+// pop();
