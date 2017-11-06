@@ -32,7 +32,8 @@ SOURCES += \
     passdata.cpp \
     modules/scopemodule.cpp \
     modules/basemodule.cpp \
-    modules/downloadmodule.cpp
+    modules/downloadmodule.cpp \
+    modules/selectmodule.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,6 +43,7 @@ HEADERS += \
     passdata.h \
     modules/scopemodule.h \
     modules/basemodule.h \
-    modules/downloadmodule.h
+    modules/downloadmodule.h \
+    modules/selectmodule.h
 
 FORMS +=
