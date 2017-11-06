@@ -1,6 +1,7 @@
 #include "basemodule.h"
 #include "modulelistitem.h"
 #include "modulelist.h"
+#include <QPainter>
 BaseRegistry::map_type BaseRegistry::map;
 
 const QString BaseModule::title = "Base";
@@ -71,4 +72,12 @@ void BaseModule::dropEvent(QDropEvent *event)
 }*/
 void BaseModule::createModuleListItem(ModuleList* list, QString title, QString description, ModuleType type) {
     list->addItem(new ModuleListItem(title, description, type));
+}
+
+void BaseModule::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
