@@ -1,14 +1,17 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-10-10T15:40:21
+# Project created by QtCreator 2017-11-05T16:59:06
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += testlib
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       -= gui
 
-TARGET = Dunes
+TARGET = tst_unittesttest
+CONFIG   += console
+CONFIG   -= app_bundle
+
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,24 +27,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-        modulelistitem.cpp \
-    blockarea.cpp \
-    modulelist.cpp \
-    passdata.cpp \
-    modules/scopemodule.cpp \
-    modules/basemodule.cpp \
-    modules/downloadmodule.cpp
+        tst_unittesttest.cpp 
 
-HEADERS += \
-        mainwindow.h \
-    modulelistitem.h \
-    blockarea.h \
-    modulelist.h \
-    passdata.h \
-    modules/scopemodule.h \
-    modules/basemodule.h \
-    modules/downloadmodule.h
-
-FORMS +=
+DEFINES += SRCDIR=\\\"$$PWD/\\\"
