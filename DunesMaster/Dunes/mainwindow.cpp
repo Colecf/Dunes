@@ -2,6 +2,7 @@
 //#include "ui_mainwindow.h"
 #include "modules/downloadmodule.h"
 #include "modules/scopemodule.h"
+#include "modules/selectmodule.h"
 #include "modulelistitem.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     BaseModule::setUp<DownloadModule>(m_modList);
     BaseModule::setUp<ScopeModule>(m_modList);
+    BaseModule::setUp<SelectModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");
