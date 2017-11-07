@@ -62,7 +62,15 @@ public:
     const static QString description;
     static QWidget* mainWindow;
 
+    // Disables switching focus when hitting tab when the focus is on a module
+    bool focusNextPrevChild(bool) override { return false; }
+
+signals:
+    void keyPressed(BaseModule*, QKeyEvent*);
+
 protected:
+    void keyPressEvent(QKeyEvent *) override;
+
     QLabel* m_titleLabel;
     QGridLayout* m_layout;
     QWidget* m_optionsPanel;

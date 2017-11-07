@@ -18,12 +18,14 @@ public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
     QGridLayout* getLayout();
+
+private slots:
+    void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
+
 private:
     QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    int moduleCount;
-    int colCount;
 };
 
 #endif // BLOCKAREA_H
