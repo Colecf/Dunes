@@ -6,6 +6,7 @@ class ScopeModule : public BaseModule
 {
 public:
     ScopeModule();
+    QString getCode();
 
     const static ModuleType type = ModuleScope;
 

@@ -13,6 +13,7 @@ class DownloadModule : public BaseModule
 public:
     DownloadModule();
     virtual ~DownloadModule();
+    QString getCode();
 
     const static ModuleType type = ModuleDL;
 

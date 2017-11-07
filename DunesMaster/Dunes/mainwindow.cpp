@@ -30,8 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
    // m_blockarea->getLayout()->setAlignment(Qt::AlignLeft);
 
     //Layout System
-    //Box is a layout that holds all layouts
+    //completeContainer is a layout that holds all layouts
     box = new QBoxLayout(QBoxLayout::LeftToRight);
+    createTopLayout();
+    createCompleteContainer();
 
     //Left layout. Module list + description
     left_layout = new QVBoxLayout();
@@ -57,11 +59,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget *test = new QWidget(this);
     //test->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     this->setCentralWidget(test);
-    test->setLayout(box);
+    test->setLayout(completeContainer);
 
     BaseModule::mainWindow = test;
 
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
+    connect(generateButton, SIGNAL(released()), m_blockarea, SLOT(generateCode()));
 }
 
 void MainWindow::updateDesc()
@@ -74,6 +77,17 @@ void MainWindow::makeBlock(QListWidgetItem* blockItem)
     m_blockarea->createBlock(((ModuleListItem*)blockItem)->getType());
 }
 
+void MainWindow::createTopLayout(){
+    top_layout = new QHBoxLayout();
+    generateButton = new QPushButton("Generate");
+    top_layout->addWidget(generateButton);
+}
+
+void MainWindow::createCompleteContainer(){
+    completeContainer = new QVBoxLayout();
+    completeContainer->addLayout(top_layout);
+    completeContainer->addLayout(box);
+}
 
 MainWindow::~MainWindow()
 {

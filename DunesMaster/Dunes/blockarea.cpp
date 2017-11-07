@@ -89,3 +89,14 @@ void BlockArea::dropEvent(QDropEvent *event)
     createBlock((((ModuleListItem*)block)->getType()));
     event->acceptProposedAction();
 }
+
+void BlockArea::generateCode(){
+    QString code = "";
+    for(int idx = 0; idx < m_layout->count(); idx++){
+        QWidget* const item = m_layout->itemAt(idx)->widget();
+        if(BaseModule* module = dynamic_cast<BaseModule*>(item)){
+            code += module->getCode();
+        }
+    }
+    qInfo() << code;
+}

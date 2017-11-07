@@ -18,6 +18,8 @@ public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
     QGridLayout* getLayout();
+private slots:
+    void generateCode();
 private:
     QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);

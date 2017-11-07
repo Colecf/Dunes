@@ -27,12 +27,18 @@ private slots:
     void makeBlock(QListWidgetItem* blockItem);
 
 private:
+    void createTopLayout();
+    void createCompleteContainer();
+
     ModuleList* m_modList;
     QTextEdit *m_desc;
     BlockArea *m_blockarea;
     QVBoxLayout *left_layout;
     QWidget *right_layout;
     QBoxLayout *box;
+    QHBoxLayout *top_layout;
+    QVBoxLayout *completeContainer;
+    QPushButton *generateButton;
 };
 
 #endif // MAINWINDOW_H

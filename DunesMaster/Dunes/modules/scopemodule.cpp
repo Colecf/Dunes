@@ -8,3 +8,7 @@ ScopeModule::ScopeModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString ScopeModule::getCode(){
+    return "scope();";
+}

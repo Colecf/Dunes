@@ -49,6 +49,7 @@ public:
     virtual void mousePressEvent(QMouseEvent*) override;
     //void dragEnterEvent(QDragEnterEvent *event);
     //void dropEvent(QDropEvent *event);
+    virtual QString getCode() = 0;
 
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
