@@ -19,6 +19,8 @@ BaseModule::BaseModule()
 
     m_optionsPanel = new QWidget();
     m_optionsPanel->setObjectName("optionsPanel");
+
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 BaseModule::~BaseModule() {
@@ -47,6 +49,11 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         mainWindow->layout()->addWidget(m_optionsPanel);
         m_optionsPanel->setHidden(false);
     }
+}
+
+void BaseModule::keyPressEvent(QKeyEvent *e)
+{
+    emit keyPressed(this, e);
 }
 
 /*  IN PROGRESS: INSERT FROM MODLIST INTO BLOCKAREA ANYWHERE

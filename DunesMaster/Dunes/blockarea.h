@@ -19,13 +19,12 @@ public:
     bool createBlock(ModuleType);
     QGridLayout* getLayout();
 private slots:
+    void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
     void generateCode();
 private:
     QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    int moduleCount;
-    int colCount;
 };
 
 #endif // BLOCKAREA_H
