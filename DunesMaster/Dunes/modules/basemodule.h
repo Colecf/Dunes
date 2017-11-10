@@ -13,7 +13,12 @@ enum ModuleType {
     ModuleError,
     ModuleDL,
     ModuleSelect,
-    ModuleScope
+    ModuleScope,
+    ModuleGetText,
+    ModuleNext,
+    ModuleAddRow,
+    ModuleAddColumn,
+    ModuleGetParent,
 };
 
 class BaseModule;

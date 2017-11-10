@@ -3,7 +3,13 @@
 #include "modules/downloadmodule.h"
 #include "modules/scopemodule.h"
 #include "modules/selectmodule.h"
+#include "modules/gettextmodule.h"
+#include "modules/nextmodule.h"
+#include "modules/addrowmodule.h"
+#include "modules/addcolumnmodule.h"
+#include "modules/getparentmodule.h"
 #include "modulelistitem.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -16,6 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<DownloadModule>(m_modList);
     BaseModule::setUp<ScopeModule>(m_modList);
     BaseModule::setUp<SelectModule>(m_modList);
+    BaseModule::setUp<GetTextModule>(m_modList);
+    BaseModule::setUp<NextModule>(m_modList);
+    BaseModule::setUp<AddRowModule>(m_modList);
+    BaseModule::setUp<AddColumnModule>(m_modList);
+    BaseModule::setUp<GetParentModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");

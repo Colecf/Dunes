@@ -33,7 +33,12 @@ SOURCES += \
     modules/scopemodule.cpp \
     modules/basemodule.cpp \
     modules/downloadmodule.cpp \
-    modules/selectmodule.cpp
+    modules/selectmodule.cpp \
+    modules/gettextmodule.cpp \
+    modules/nextmodule.cpp \
+    modules/addrowmodule.cpp \
+    modules/addcolumnmodule.cpp \
+    modules/getparentmodule.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,6 +49,11 @@ HEADERS += \
     modules/scopemodule.h \
     modules/basemodule.h \
     modules/downloadmodule.h \
-    modules/selectmodule.h
+    modules/selectmodule.h \
+    modules/gettextmodule.h \
+    modules/nextmodule.h \
+    modules/addrowmodule.h \
+    modules/addcolumnmodule.h \
+    modules/getparentmodule.h
 
 FORMS +=
