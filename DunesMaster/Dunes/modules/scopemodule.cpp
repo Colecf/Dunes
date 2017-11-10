@@ -10,5 +10,12 @@ ScopeModule::ScopeModule()
 }
 
 QString ScopeModule::getCode(){
-    return "scope();";
+    QString code = "scope();\n";
+    if(this->children != NULL){
+        for(size_t i = 0; i < this->children->size(); i++){
+            code += this->children->at(i)->getCode();
+        }
+    }
+    code += "pop();\n";
+    return code;
 }

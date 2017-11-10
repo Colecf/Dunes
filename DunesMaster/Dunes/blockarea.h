@@ -7,6 +7,7 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QListWidgetItem>
+#include <unordered_map>
 #include "modulelistitem.h"
 #include "modules/basemodule.h"
 #include "modules/scopemodule.h"
@@ -25,6 +26,7 @@ private:
     QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    int getCol(const std::unordered_map<int, int> *dict, int row);
 };
 
 #endif // BLOCKAREA_H

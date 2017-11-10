@@ -2,6 +2,7 @@
 #define BASEMODULE_H
 #include <map>
 #include <string>
+#include <vector>
 #include <QString>
 #include <QPushButton>
 #include <QListWidget>
@@ -62,6 +63,7 @@ public:
     const static QString title;
     const static QString description;
     static QWidget* mainWindow;
+    std::vector<BaseModule*> *children;
 
     // Disables switching focus when hitting tab when the focus is on a module
     bool focusNextPrevChild(bool) override { return false; }
