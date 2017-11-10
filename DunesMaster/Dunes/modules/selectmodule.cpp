@@ -20,3 +20,7 @@ SelectModule::SelectModule()
     optionsLayout->addWidget(SelectBox, 0, 1);
 
 }
+
+QString SelectModule::getCode(){
+    return "boilerplateselect()";
+}

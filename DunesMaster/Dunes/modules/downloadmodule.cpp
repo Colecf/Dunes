@@ -9,7 +9,6 @@ const QString DownloadModule::description = "Download Description";
 
 DownloadModule::DownloadModule()
 {
-    BaseModule::BaseModule();
     m_titleLabel->setText(title);
     QLabel* inputTypeLabel = new QLabel("Input type:");
     inputTypeDropDown = new QComboBox();
@@ -54,4 +53,8 @@ void DownloadModule::inputTypeChanged(int slot)
         urlBox->setHidden(true);
         urlLabel->setHidden(true);
     }
+}
+
+QString DownloadModule::getCode(){
+    return "get_page(top());\n";
 }

@@ -41,12 +41,12 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         setStyleSheet("#BaseModule { background-color: white; border: 3px solid lightblue; border-radius:20px; }");
         setObjectName("BaseModuleSelected");
 
-        QWidget* toRemove = mainWindow->findChild<QWidget*>("optionsPanel", Qt::FindDirectChildrenOnly);
+        QWidget* toRemove = mainWindow->findChild<QWidget*>("optionsPanel");
         if(toRemove) {
             mainWindow->layout()->removeWidget(toRemove);
             toRemove->setParent(nullptr);
         }
-        mainWindow->layout()->addWidget(m_optionsPanel);
+        mainWindow->layout()->itemAt(1)->layout()->addWidget(m_optionsPanel);
         m_optionsPanel->setHidden(false);
     }
 }

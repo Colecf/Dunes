@@ -2,6 +2,7 @@
 #define BASEMODULE_H
 #include <map>
 #include <string>
+#include <vector>
 #include <QString>
 #include <QPushButton>
 #include <QListWidget>
@@ -54,6 +55,7 @@ public:
     virtual void mousePressEvent(QMouseEvent*) override;
     //void dragEnterEvent(QDragEnterEvent *event);
     //void dropEvent(QDropEvent *event);
+    virtual QString getCode() = 0;
 
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
@@ -66,6 +68,7 @@ public:
     const static QString title;
     const static QString description;
     static QWidget* mainWindow;
+    std::vector<BaseModule*> *children;
 
     // Disables switching focus when hitting tab when the focus is on a module
     bool focusNextPrevChild(bool) override { return false; }

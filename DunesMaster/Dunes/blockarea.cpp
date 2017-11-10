@@ -1,6 +1,9 @@
 #include "blockarea.h"
+#include <stack>
+#include <limits>
 //Remove QDebug later
 #include <QDebug>
+
 BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 {
     QWidget* widget = new QWidget;
@@ -109,4 +112,80 @@ void BlockArea::dropEvent(QDropEvent *event)
     QListWidgetItem *block = ((PassData*)itemData)->getQListWidgetItem();
     createBlock((((ModuleListItem*)block)->getType()));
     event->acceptProposedAction();
+}
+
+int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
+    auto found = dict->find(row);
+    if(found == dict->end()){
+        qErrnoWarning("Error: Could not find Block given key %d", row);
+        return -1;
+    }
+    return found->second;
+
+}
+
+void BlockArea::generateCode(){
+    QString code = "";
+    // Create mapping from row to column, do this instead of row to module because we can't get col from module
+    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
+    for(int idx = 0; idx < m_layout->count(); idx++){
+        int row, col, rowSpan, colSpan;
+        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
+        rowToCol->insert({row, col});
+    }
+    // Stack of every parent-block's row (while, if, scope, foreach). Get the block via casting a widget w/ itemAtPosition
+    std::stack<int> *parentRowStack = new std::stack<int>;
+    for(int row = 0; row < m_layout->count(); row++){
+        int col, prevModuleCol;
+        if((col = getCol(rowToCol, row)) == -1){
+            qErrnoWarning("Error: col must integer >= 0");
+            return;
+        }
+        QWidget* const item = m_layout->itemAtPosition(row, col)->widget();
+        if(BaseModule *module = dynamic_cast<BaseModule*>(item)){
+            int parentCol;
+            // If we have parent blocks, get the parentCol and compare with current col
+            if(!parentRowStack->empty() && (parentCol = getCol(rowToCol, parentRowStack->top())) != -1){
+                // If equal, we know we need to pop off all block rows that have a corresponding col >= than the current block's col
+                while(parentCol >= col){
+                    parentRowStack->pop();
+                    if(!parentRowStack->empty()){
+                        parentCol = getCol(rowToCol, parentRowStack->top());
+                    }
+                    else{
+                        // In the case that parentCol = col = 0, we don't want it to pop again.
+                        // Set it to large random negative # to not trigger bottom if-statement
+                        parentCol = std::numeric_limits<int>::min();
+                    }
+                }
+                // If the parent is a parent to this module, add it to the parent's children
+                if(parentCol+1 == col){
+                    QWidget* const parent = m_layout->itemAtPosition(parentRowStack->top(), parentCol)->widget();
+                    if(BaseModule *parentModule = dynamic_cast<BaseModule*>(parent)){
+                        parentModule->children->push_back(module);
+                    }
+                }
+            }
+            // If it's a scope, push on the row of the block
+            if(dynamic_cast<ScopeModule*>(module)){
+                parentRowStack->push(row);
+                module->children = new std::vector<BaseModule*>;
+            }
+        }
+        prevModuleCol = col;
+    }
+    for(int row = 0; row < m_layout->count(); row++){
+        int col;
+        if((col = getCol(rowToCol, row)) == -1){
+            qErrnoWarning("Error: col must integer >= 0");
+            return;
+        }
+        if(col == 0){
+            QWidget* const item = m_layout->itemAtPosition(row, col)->widget();
+            if(BaseModule *module = dynamic_cast<BaseModule*>(item)){
+                code += module->getCode();
+            }
+        }
+    }
+    qInfo() << code;
 }
