@@ -11,6 +11,14 @@
 #include "modulelistitem.h"
 #include "modules/basemodule.h"
 #include "modules/scopemodule.h"
+#include "modules/selectmodule.h"
+#include "modules/gettextmodule.h"
+#include "modules/nextmodule.h"
+#include "modules/addrowmodule.h"
+#include "modules/addcolumnmodule.h"
+#include "modules/getparentmodule.h"
+#include "modules/foreachmodule.h"
+#include "modules/getattributemodule.h"
 #include "modulelist.h"
 class BlockArea : public QScrollArea
 {
