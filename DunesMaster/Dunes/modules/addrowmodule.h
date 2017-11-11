@@ -6,6 +6,7 @@ class AddRowModule : public BaseModule
 {
 public:
     AddRowModule();
+    QString getCode();
 
     const static ModuleType type = ModuleAddRow;
 

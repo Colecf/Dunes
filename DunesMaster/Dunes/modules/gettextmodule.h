@@ -6,6 +6,7 @@ class GetTextModule : public BaseModule
 {
 public:
     GetTextModule();
+    QString getCode();
 
     const static ModuleType type = ModuleGetText;
 

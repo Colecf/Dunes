@@ -8,3 +8,7 @@ AddColumnModule::AddColumnModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString AddColumnModule::getCode(){
+    return "boilerplateselect()";
+}

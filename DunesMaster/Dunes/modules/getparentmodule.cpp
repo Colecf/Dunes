@@ -8,3 +8,7 @@ GetParentModule::GetParentModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString GetParentModule::getCode(){
+    return "boilerplateselect()";
+}

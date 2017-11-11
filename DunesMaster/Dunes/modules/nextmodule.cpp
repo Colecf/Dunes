@@ -8,3 +8,7 @@ NextModule::NextModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString NextModule::getCode(){
+    return "boilerplateselect()";
+}

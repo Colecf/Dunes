@@ -6,6 +6,7 @@ class GetParentModule : public BaseModule
 {
 public:
     GetParentModule();
+    QString getCode();
 
     const static ModuleType type = ModuleGetParent;
 

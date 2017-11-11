@@ -38,7 +38,9 @@ SOURCES += \
     modules/nextmodule.cpp \
     modules/addrowmodule.cpp \
     modules/addcolumnmodule.cpp \
-    modules/getparentmodule.cpp
+    modules/getparentmodule.cpp \
+    modules/foreachmodule.cpp \
+    modules/getattributemodule.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,6 +56,8 @@ HEADERS += \
     modules/nextmodule.h \
     modules/addrowmodule.h \
     modules/addcolumnmodule.h \
-    modules/getparentmodule.h
+    modules/getparentmodule.h \
+    modules/foreachmodule.h \
+    modules/getattributemodule.h
 
 FORMS +=

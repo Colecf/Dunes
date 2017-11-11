@@ -8,3 +8,7 @@ GetTextModule::GetTextModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString GetTextModule::getCode(){
+    return "boilerplateselect()";
+}

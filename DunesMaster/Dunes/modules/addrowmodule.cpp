@@ -8,3 +8,7 @@ AddRowModule::AddRowModule()
 {
     m_titleLabel->setText(title);
 }
+
+QString AddRowModule::getCode(){
+    return "boilerplateselect()";
+}

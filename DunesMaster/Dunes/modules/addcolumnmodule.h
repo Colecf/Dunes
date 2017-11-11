@@ -6,6 +6,7 @@ class AddColumnModule : public BaseModule
 {
 public:
     AddColumnModule();
+    QString getCode();
 
     const static ModuleType type = ModuleAddColumn;
 

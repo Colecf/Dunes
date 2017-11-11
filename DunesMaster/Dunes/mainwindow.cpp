@@ -8,8 +8,9 @@
 #include "modules/addrowmodule.h"
 #include "modules/addcolumnmodule.h"
 #include "modules/getparentmodule.h"
+#include "modules/foreachmodule.h"
+#include "modules/getattributemodule.h"
 #include "modulelistitem.h"
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -27,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<AddRowModule>(m_modList);
     BaseModule::setUp<AddColumnModule>(m_modList);
     BaseModule::setUp<GetParentModule>(m_modList);
+    BaseModule::setUp<ForEachModule>(m_modList);
+    BaseModule::setUp<GetAttributeModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");
