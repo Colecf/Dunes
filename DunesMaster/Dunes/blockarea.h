@@ -26,12 +26,15 @@ class BlockArea : public QScrollArea
 public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
+    bool createBlockAt(ModuleType blockType, int module_location);
+    void moveBlocksDown(int module_location);
     QGridLayout* getLayout();
 private slots:
     void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
     void generateCode();
 private:
     QGridLayout* m_layout;
+    void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     int getCol(const std::unordered_map<int, int> *dict, int row);

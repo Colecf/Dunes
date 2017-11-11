@@ -2,6 +2,7 @@
 #include "modulelistitem.h"
 #include "modulelist.h"
 #include <QPainter>
+#include <QDebug>
 BaseRegistry::map_type BaseRegistry::map;
 
 const QString BaseModule::title = "Base";
@@ -32,6 +33,7 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
     //TODO change to using slots and signals to avoid global mainWindow
     if(event->button() == Qt::LeftButton)
     {
+
         BaseModule* selected = parent()->findChild<BaseModule*>("BaseModuleSelected");
         if(selected)
         {
@@ -48,9 +50,37 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         }
         mainWindow->layout()->itemAt(1)->layout()->addWidget(m_optionsPanel);
         m_optionsPanel->setHidden(false);
+
+       //qInfo() << layout()->parentWidget()->layout();
+        dragStartPosition = event->pos();
     }
 }
 
+void BaseModule::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!(event->buttons() & Qt::LeftButton))
+    {
+        return;
+    }
+    if ((event->pos() - dragStartPosition).manhattanLength() < QApplication::startDragDistance())
+    {
+        return;
+    }
+
+        QDrag *drag = new QDrag(this);
+        PassData *mimeData = new PassData;
+        //qInfo() <<"HELLO: " <<  layout()->parentWidget()->layout();
+        QGridLayout *blockArea = (QGridLayout *)layout()->parentWidget()->layout();
+        for(int iter = 0; iter < blockArea->count(); iter++)
+        {
+            if((QWidget *)blockArea->itemAt(iter) == layout()->parentWidget())
+            {
+                mimeData->setIndex(iter);
+            }
+        }
+        drag->setMimeData(mimeData);
+        Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
+}
 void BaseModule::keyPressEvent(QKeyEvent *e)
 {
     emit keyPressed(this, e);

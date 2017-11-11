@@ -27,6 +27,7 @@ void ModuleList::mouseMoveEvent(QMouseEvent *event)
 
         mimeData->setText(currentItem()->text());
         mimeData->setQListWidgetItem(this);
+        mimeData->setIndex(-1);
         drag->setMimeData(mimeData);
         //drag->setPixmap(iconPixmap);
 
