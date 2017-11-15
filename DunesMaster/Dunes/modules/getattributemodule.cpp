@@ -22,5 +22,8 @@ GetAttributeModule::GetAttributeModule()
 }
 
 QString GetAttributeModule::getCode(){
-    return "boilerplateselect()";
+    if(SelectBox->text().length() == 0) {
+        return COMPILE_ERROR;
+    }
+    return "getAttribute("+SelectBox->text()+")";
 }

@@ -10,6 +10,9 @@
 #include <QMouseEvent>
 #include <QBoxLayout>
 #include "../modulelist.h"
+
+#define COMPILE_ERROR QString()
+
 enum ModuleType {
     ModuleError,
     ModuleDL,

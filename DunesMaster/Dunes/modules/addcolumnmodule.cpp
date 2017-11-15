@@ -10,5 +10,5 @@ AddColumnModule::AddColumnModule()
 }
 
 QString AddColumnModule::getCode(){
-    return "boilerplateselect()";
+    return "add_column(top())";
 }

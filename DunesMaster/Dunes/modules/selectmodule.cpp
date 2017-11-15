@@ -22,5 +22,8 @@ SelectModule::SelectModule()
 }
 
 QString SelectModule::getCode(){
-    return "boilerplateselect()";
+    if(SelectBox->text().length() == 0) {
+        return COMPILE_ERROR;
+    }
+    return "select("+SelectBox->text()+")";
 }

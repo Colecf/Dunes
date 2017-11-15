@@ -10,5 +10,5 @@ AddRowModule::AddRowModule()
 }
 
 QString AddRowModule::getCode(){
-    return "boilerplateselect()";
+    return "add_row()";
 }

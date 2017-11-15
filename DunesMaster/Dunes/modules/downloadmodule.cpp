@@ -56,5 +56,12 @@ void DownloadModule::inputTypeChanged(int slot)
 }
 
 QString DownloadModule::getCode(){
-    return "get_page(top());\n";
+    if(inputTypeDropDown->currentIndex() == 1) {
+        return "get_page(top());\n";
+    } else {
+        if(urlBox->text().length() == 0) {
+            return COMPILE_ERROR;
+        }
+        return "get_page("+urlBox->text()+")\n";
+    }
 }
