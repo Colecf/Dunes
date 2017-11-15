@@ -181,12 +181,7 @@ void BlockArea::dropEvent(QDropEvent *event)
         int index = ((PassData*)itemData)->getIndex();
         //need type from base module or something
 
-        std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
-        for(int idx = 0; idx < m_layout->count(); idx++){
-            int row, col, rowSpan, colSpan;
-            m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
-            rowToCol->insert({row, col});
-        }
+        std::unordered_map<int, int> *rowToCol = createRowToCol();
 
         qInfo() << "not from modlist index: " << ((PassData*)itemData)->getIndex() << m_layout->count();
 
@@ -206,6 +201,16 @@ void BlockArea::dropEvent(QDropEvent *event)
 
 }
 
+std::unordered_map<int, int>* BlockArea::createRowToCol(){
+    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
+    for(int idx = 0; idx < m_layout->count(); idx++){
+        int row, col, rowSpan, colSpan;
+        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
+        rowToCol->insert({row, col});
+    }
+    return rowToCol;
+}
+
 int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
     auto found = dict->find(row);
     if(found == dict->end()){
@@ -219,12 +224,7 @@ int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
 void BlockArea::generateCode(){
     QString code = "";
     // Create mapping from row to column, do this instead of row to module because we can't get col from module
-    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
-    for(int idx = 0; idx < m_layout->count(); idx++){
-        int row, col, rowSpan, colSpan;
-        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
-        rowToCol->insert({row, col});
-    }
+    std::unordered_map<int, int> *rowToCol = createRowToCol();
     // Stack of every parent-block's row (while, if, scope, foreach). Get the block via casting a widget w/ itemAtPosition
     std::stack<int> *parentRowStack = new std::stack<int>;
     for(int row = 0; row < m_layout->count(); row++){

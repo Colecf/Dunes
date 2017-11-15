@@ -37,6 +37,7 @@ private:
     void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    std::unordered_map<int, int>* createRowToCol();
     int getCol(const std::unordered_map<int, int> *dict, int row);
 };
 
