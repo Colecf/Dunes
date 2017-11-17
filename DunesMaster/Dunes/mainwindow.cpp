@@ -78,9 +78,9 @@ MainWindow::MainWindow(QWidget *parent) :
     test->setLayout(completeContainer);
 
     BaseModule::mainWindow = test;
-
+    codeGen = new CodeGen(m_blockarea);
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
-    connect(generateButton, SIGNAL(released()), m_blockarea, SLOT(generateCode()));
+    connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
 }
 
 void MainWindow::updateDesc()

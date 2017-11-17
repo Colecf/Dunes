@@ -40,7 +40,8 @@ SOURCES += \
     modules/addcolumnmodule.cpp \
     modules/getparentmodule.cpp \
     modules/foreachmodule.cpp \
-    modules/getattributemodule.cpp
+    modules/getattributemodule.cpp \
+    codegen.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -58,6 +59,7 @@ HEADERS += \
     modules/addcolumnmodule.h \
     modules/getparentmodule.h \
     modules/foreachmodule.h \
-    modules/getattributemodule.h
+    modules/getattributemodule.h \
+    codegen.h
 
 FORMS +=
