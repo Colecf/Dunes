@@ -19,6 +19,8 @@
 #include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
+#include "modules/ifmodule.h"
+#include "modules/whilemodule.h"
 #include "modulelist.h"
 class BlockArea : public QScrollArea
 {

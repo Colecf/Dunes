@@ -41,7 +41,9 @@ SOURCES += \
     modules/getparentmodule.cpp \
     modules/foreachmodule.cpp \
     modules/getattributemodule.cpp \
-    codegen.cpp
+    codegen.cpp \
+    modules/ifmodule.cpp \
+    modules/whilemodule.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,6 +62,8 @@ HEADERS += \
     modules/getparentmodule.h \
     modules/foreachmodule.h \
     modules/getattributemodule.h \
-    codegen.h
+    codegen.h \
+    modules/ifmodule.h \
+    modules/whilemodule.h
 
 FORMS +=

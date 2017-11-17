@@ -10,6 +10,8 @@
 #include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
+#include "modules/ifmodule.h"
+#include "modules/whilemodule.h"
 #include "modulelistitem.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -30,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<GetParentModule>(m_modList);
     BaseModule::setUp<ForEachModule>(m_modList);
     BaseModule::setUp<GetAttributeModule>(m_modList);
+    BaseModule::setUp<IfModule>(m_modList);
+    BaseModule::setUp<WhileModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");
