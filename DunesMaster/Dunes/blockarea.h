@@ -30,6 +30,8 @@ public:
     bool createBlock(ModuleType);
     bool createBlockAt(ModuleType blockType, int module_location);
     void moveBlocksDown(int module_location);
+    void moveBlocksDownUntil(int start, int end);
+    void moveBlocksUp(int start, int end);
     QGridLayout* getLayout();
     std::unordered_map<int, int>* createRowToCol();
     int getCol(const std::unordered_map<int, int> *dict, int row);
@@ -37,7 +39,6 @@ private slots:
     void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
 private:
     QGridLayout* m_layout;
-    void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 };

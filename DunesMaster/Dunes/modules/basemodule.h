@@ -90,6 +90,7 @@ protected:
     QGridLayout* m_layout;
     QWidget* m_optionsPanel;
 private:
+    //int index;
     QPoint dragStartPosition;
     void paintEvent(QPaintEvent *) override;
     static void createModuleListItem(ModuleList* list, QString title, QString description, ModuleType type);

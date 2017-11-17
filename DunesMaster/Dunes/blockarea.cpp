@@ -64,7 +64,7 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
         }
 
         if(newCol != col) {
-            m_layout->addWidget(mod, row, newCol, 1, 1);
+            m_layout->addWidget(mod, row, newCol, 1, 2);
         }
 
         // Unindent everything after this if this was an unindent
@@ -94,7 +94,7 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
     BaseModule* module = BaseRegistry::createInstance(blockType);
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
     int desiredRowSpan = 1, desiredColSpan = 2;
-    int row = 0, col = 0;
+    int col = 0;
 
 
     if(m_layout->count() != 0)
@@ -105,39 +105,57 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
     return true;
 }
 
-
+//need to move blocks up
 void BlockArea::moveBlocksDown(int module_location)
 {
     int desiredRowSpan = 1, desiredColSpan = 2;
-    int row = 0, col = 0, rowSpan, colSpan;
     QWidget* prevWidget = nullptr;
     int mod_count = m_layout->count() - 1;
 
-    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
-    for(int idx = 0; idx < m_layout->count(); idx++){
-        int row, col, rowSpan, colSpan;
-        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
-        rowToCol->insert({row, col});
-    }
+    std::unordered_map<int, int> *rowToCol = createRowToCol();
 
     for(; module_location <= mod_count; module_location++)
     {
-
-        getCol(rowToCol, module_location);
+        //getCol(rowToCol, module_location);
         prevWidget = m_layout->itemAtPosition(module_location, getCol(rowToCol, module_location))->widget();
         m_layout->addWidget(prevWidget, module_location + 1, getCol(rowToCol, module_location), desiredRowSpan, desiredColSpan);
     }
 }
 
+void BlockArea::moveBlocksDownUntil(int start, int end)
+{
+    int desiredRowSpan = 1, desiredColSpan = 2;
+    QWidget* prevWidget = nullptr;
+
+    std::unordered_map<int, int> *rowToCol = createRowToCol();
+    for(; start < end; start++)
+    {
+        //getCol(rowToCol, module_location);
+        //qInfo() << "start: " << start << "end: " << end;
+        prevWidget = m_layout->itemAtPosition(start, getCol(rowToCol, start))->widget();
+        m_layout->addWidget(prevWidget, start + 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
+    }
+}
+
+void BlockArea::moveBlocksUp(int start, int end)
+{
+    int desiredRowSpan = 1, desiredColSpan = 2;
+    QWidget* prevWidget = nullptr;
+
+    std::unordered_map<int, int> *rowToCol = createRowToCol();
+    //qInfo() << "start: " << start << "end: " << end;
+    for(; start <= end; start++)
+    {
+        //qInfo() << "start: " << start;
+        prevWidget = m_layout->itemAtPosition(start, getCol(rowToCol, start))->widget();
+        m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
+    }
+}
 QGridLayout* BlockArea::getLayout()
 {
     return m_layout;
 }
 
-void BlockArea::dragMoveEvent(QDragMoveEvent *event)
-{
-  //  qInfo() << event->pos();
-}
 void BlockArea::dragEnterEvent(QDragEnterEvent *event)
 {
      //if (event->mimeData()->hasFormat("text/plain"))
@@ -153,12 +171,12 @@ void BlockArea::dropEvent(QDropEvent *event)
 
   const QMimeData* itemData = event->mimeData();
 
-    //qInfo() << "DROPPED: " << event->pos() << event->pos().y() << event->pos().x();
+    qInfo() << "DROPPED: " << event->pos() << event->pos().y() << event->pos().x();
 
 //found that blocks were ~37 units tall
 
     int module_location = event->pos().y() / 37;
-    //qInfo() << "/37 RESULT: " << module_location;
+    qInfo() << "/37 RESULT: " << module_location << event->pos().y();
 
 
 
@@ -177,23 +195,34 @@ void BlockArea::dropEvent(QDropEvent *event)
     }
     else
     {
-        int row = 0, col = 0, rowSpan, colSpan;
         int index = ((PassData*)itemData)->getIndex();
-        //need type from base module or something
 
-        std::unordered_map<int, int> *rowToCol = createRowToCol();
+        //qInfo() << "not from modlist index: " << ((PassData*)itemData)->getIndex() << m_layout->count();
 
-        qInfo() << "not from modlist index: " << ((PassData*)itemData)->getIndex() << m_layout->count();
-
-        QWidget *block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
-        qInfo() << block;
-        if(module_location > m_layout->count() && index < m_layout->count() - 1)
+        if(module_location > index)
         {
-            qInfo() <<"ADD TO END FROM BLOCKAREA";
-            QWidget *block = m_layout->itemAtPosition(((PassData*)itemData)->getIndex(), getCol(rowToCol, index))->widget();
-            //m_layout->getItemPosition(m_layout->count()-1, &row, &col, &rowSpan, &colSpan);
-            moveBlocksDown(module_location);
-            m_layout->addWidget(block, module_location, col, 1, 1);
+            if(module_location >= m_layout->count())
+                module_location = m_layout->count() - 1;
+            std::unordered_map<int, int> *rowToCol = createRowToCol();
+            QWidget *block = nullptr;
+            block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
+            if(module_location > index)
+            moveBlocksUp((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
+            createRowToCol();
+            m_layout->addWidget(block, module_location, 0, 1, 1);
+            createRowToCol();
+            connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+        }
+        else if(index > module_location)
+        {
+            std::unordered_map<int, int> *rowToCol = createRowToCol();
+            QWidget *block = nullptr;
+            block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
+            moveBlocksDownUntil((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
+            m_layout->addWidget(block, module_location, 0, 1, 1);
+            connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+            //QWidget *block = nullptr;
+            //block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
         }
        event->acceptProposedAction();
     }

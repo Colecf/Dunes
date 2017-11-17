@@ -29,8 +29,6 @@ void ModuleList::mouseMoveEvent(QMouseEvent *event)
         mimeData->setQListWidgetItem(this);
         mimeData->setIndex(-1);
         drag->setMimeData(mimeData);
-        //drag->setPixmap(iconPixmap);
 
         Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
-        //addItem("hello new block");
 }
