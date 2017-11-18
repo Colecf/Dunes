@@ -12,6 +12,7 @@
 #include "modules/getattributemodule.h"
 #include "modules/ifmodule.h"
 #include "modules/whilemodule.h"
+#include "modules/constantmodule.h"
 #include "modulelistitem.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -34,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<GetAttributeModule>(m_modList);
     BaseModule::setUp<IfModule>(m_modList);
     BaseModule::setUp<WhileModule>(m_modList);
+    BaseModule::setUp<ConstantModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");
