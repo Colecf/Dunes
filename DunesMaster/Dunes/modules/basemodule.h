@@ -61,7 +61,7 @@ public:
     virtual ~BaseModule();
 
     virtual void mousePressEvent(QMouseEvent*) override;
-    void mouseMoveEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*) override;
     //void dropEvent(QDropEvent *event);
      virtual QString getCode() = 0;
 
