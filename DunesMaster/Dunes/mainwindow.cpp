@@ -10,6 +10,9 @@
 #include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
+#include "modules/ifmodule.h"
+#include "modules/whilemodule.h"
+#include "modules/constantmodule.h"
 #include "modulelistitem.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -30,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<GetParentModule>(m_modList);
     BaseModule::setUp<ForEachModule>(m_modList);
     BaseModule::setUp<GetAttributeModule>(m_modList);
+    BaseModule::setUp<IfModule>(m_modList);
+    BaseModule::setUp<WhileModule>(m_modList);
+    BaseModule::setUp<ConstantModule>(m_modList);
 
     //Description box
     m_desc = new QTextEdit("Click on a module to see its description!");
@@ -40,10 +46,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Setting up block diagram area
     m_blockarea = new BlockArea(this);
-    //m_blockarea->move(320, 0);
-    //m_blockarea->resize(640, 540);
-    //m_blockarea->createBlock("Scope");
-   // m_blockarea->getLayout()->setAlignment(Qt::AlignLeft);
 
     //Layout System
     //completeContainer is a layout that holds all layouts
@@ -78,9 +80,9 @@ MainWindow::MainWindow(QWidget *parent) :
     test->setLayout(completeContainer);
 
     BaseModule::mainWindow = test;
-
+    codeGen = new CodeGen(m_blockarea);
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
-    connect(generateButton, SIGNAL(released()), m_blockarea, SLOT(generateCode()));
+    connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
 }
 
 void MainWindow::updateDesc()

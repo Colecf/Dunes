@@ -19,7 +19,9 @@
 #include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
-#include "modulelist.h"
+#include "modules/ifmodule.h"
+#include "modules/whilemodule.h"
+#include "modules/constantmodule.h"
 class BlockArea : public QScrollArea
 {
     Q_OBJECT
@@ -28,17 +30,17 @@ public:
     bool createBlock(ModuleType);
     bool createBlockAt(ModuleType blockType, int module_location);
     void moveBlocksDown(int module_location);
+    void moveBlocksDownUntil(int start, int end);
+    void moveBlocksUp(int start, int end);
     QGridLayout* getLayout();
-private slots:
-    void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
-    void generateCode();
-private:
-    QGridLayout* m_layout;
-    void dragMoveEvent(QDragMoveEvent*);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
     std::unordered_map<int, int>* createRowToCol();
     int getCol(const std::unordered_map<int, int> *dict, int row);
+private slots:
+    void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
+private:
+    QGridLayout* m_layout;
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 };
 
 #endif // BLOCKAREA_H

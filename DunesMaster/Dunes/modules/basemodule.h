@@ -25,6 +25,9 @@ enum ModuleType {
     ModuleGetParent,
     ModuleForEach,
     ModuleGetAttribute,
+    ModuleIf,
+    ModuleWhile,
+    ModuleConstant,
 };
 
 class BaseModule;

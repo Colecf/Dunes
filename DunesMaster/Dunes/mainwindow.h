@@ -10,6 +10,7 @@
 #include <QRadioButton>
 #include "modulelist.h"
 #include "blockarea.h"
+#include "codegen.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,6 +40,7 @@ private:
     QHBoxLayout *top_layout;
     QVBoxLayout *completeContainer;
     QPushButton *generateButton;
+    CodeGen *codeGen;
 };
 
 #endif // MAINWINDOW_H

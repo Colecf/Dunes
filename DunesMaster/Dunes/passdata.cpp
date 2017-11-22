@@ -1,8 +1,7 @@
 #include "passdata.h"
 
-PassData::PassData(QObject *parent) : QMimeData()
+PassData::PassData() : QMimeData()
 {
-    //QMimeData::QMimeData();
 }
 
 void PassData::setQListWidgetItem(QListWidget *list)
@@ -21,4 +20,14 @@ void PassData::setIndex(int index)
 int PassData::getIndex()
 {
     return idx;
+}
+
+void PassData::setHeight(int new_height)
+{
+    height = new_height;
+}
+
+int PassData::getHeight()
+{
+    return height;
 }

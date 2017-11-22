@@ -15,7 +15,7 @@ function top(){
 
 function pop(){
     if(stack.length < 0){
-	console.error("Popping with empty stack");
+	   console.error("Popping with empty stack");
     }
     return stack.pop();
 }
@@ -31,7 +31,7 @@ function children(query, css){
     var $ = query;
     var html = "";
     $(css).contents().each(function(i, elem){
-	html += $.html(this);
+	   html += $.html(this);
     });
     return html;
 }
@@ -40,10 +40,10 @@ function select_by_css(html, css, get_children=false){
     var $ = cheerio.load(html);
     pop();
     if(get_children){
-	stack.push(children($, css));
+	   stack.push(children($, css));
     }
     else{
-	stack.push($.html(css));
+	   stack.push($.html(css));
     }
 }
 function get_text(){
@@ -69,7 +69,7 @@ function scope(){
 
 function constant(data){
     if(stack.length > 0){
-	pop();
+	   pop();
     }
     stack.push(data);
 }
@@ -84,7 +84,7 @@ function next(){
     pop();
     var html = "";
     $("*").first().nextAll().each(function(i, elem){
-	html += $.html(this);
+	   html += $.html(this);
     });
     stack.push(html);
 }

@@ -3,6 +3,7 @@
 #include "modulelist.h"
 #include <QPainter>
 #include <QDebug>
+#include <unordered_map>
 BaseRegistry::map_type BaseRegistry::map;
 
 const QString BaseModule::title = "Base";
@@ -43,6 +44,7 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         setStyleSheet("#BaseModule { background-color: white; border: 3px solid lightblue; border-radius:20px; }");
         setObjectName("BaseModuleSelected");
 
+
         QWidget* toRemove = mainWindow->findChild<QWidget*>("optionsPanel");
         if(toRemove) {
             mainWindow->layout()->removeWidget(toRemove);
@@ -50,9 +52,8 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         }
         mainWindow->layout()->itemAt(1)->layout()->addWidget(m_optionsPanel);
         m_optionsPanel->setHidden(false);
-
-       //qInfo() << layout()->parentWidget()->layout();
         dragStartPosition = event->pos();
+
     }
 }
 
@@ -66,20 +67,30 @@ void BaseModule::mouseMoveEvent(QMouseEvent *event)
     {
         return;
     }
-
         QDrag *drag = new QDrag(this);
         PassData *mimeData = new PassData;
-        //qInfo() <<"HELLO: " <<  layout()->parentWidget()->layout();
-        QGridLayout *blockArea = (QGridLayout *)layout()->parentWidget()->layout();
+        QGridLayout *blockArea = (QGridLayout *)parentWidget()->layout();
+        std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
+        for(int idx = 0; idx < blockArea->count(); idx++){
+            int row, col, rowSpan, colSpan;
+            blockArea->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
+
+            rowToCol->insert({row, col});
+        }
+
         for(int iter = 0; iter < blockArea->count(); iter++)
         {
-            if((QWidget *)blockArea->itemAt(iter) == layout()->parentWidget())
+            auto found = rowToCol->find(iter);
+            if(found == rowToCol->end()){
+                qErrnoWarning("Error: Could not find Block given key %d", iter);
+            }
+            else if(blockArea->itemAtPosition(iter, found->second)->widget() == this)
             {
                 mimeData->setIndex(iter);
             }
         }
         drag->setMimeData(mimeData);
-        Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
+        drag->exec(Qt::MoveAction);
 }
 void BaseModule::keyPressEvent(QKeyEvent *e)
 {
@@ -92,27 +103,6 @@ QString BaseModule::escapeString(QString s) {
     return s;
 }
 
-/*  IN PROGRESS: INSERT FROM MODLIST INTO BLOCKAREA ANYWHERE
- * void BaseModule::dragEnterEvent(QDragEnterEvent *event)
-{
-    //if (event->mimeData()->hasFormat("text/plain"))
-            event->acceptProposedAction();
-}
-
-void BaseModule::dropEvent(QDropEvent *event)
-{
-    //textBrowser->setPlainText(event->mimeData()->text());
-    //mimeTypeCombo->clear();
-   //mimeTypeCombo->addItems(event->mimeData()->formats());
-   const QMimeData* itemData = event->mimeData();
-
-    //qInfo() << event->mimeData()->text();
-    //qInfo() << ((PassData*)test)->getQListWidgetItem()->text();
-    QListWidgetItem *block = ((PassData*)itemData)->getQListWidgetItem();
-    qInfo() << ((ModuleListItem*)block)->getType();
-    createBlock((((ModuleListItem*)block)->getType()));
-    event->acceptProposedAction();
-}*/
 void BaseModule::createModuleListItem(ModuleList* list, QString title, QString description, ModuleType type) {
     list->addItem(new ModuleListItem(title, description, type));
 }
