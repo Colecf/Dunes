@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString IfModule::title = "If";
-const QString IfModule::description = "If Description";
+const QString IfModule::description = "Allows branching code based on the contents of the input stream. It does not edit the input stream.";
 
 IfModule::IfModule()
 {

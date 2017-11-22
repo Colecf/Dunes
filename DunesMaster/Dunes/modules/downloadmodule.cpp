@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString DownloadModule::title = "Download";
-const QString DownloadModule::description = "Download Description";
+const QString DownloadModule::description = "Downloads a webpage to the input stream. The URL to download can either be constant, or come from the input stream.";
 
 DownloadModule::DownloadModule()
 {

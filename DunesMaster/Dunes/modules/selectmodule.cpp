@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString SelectModule::title = "Select";
-const QString SelectModule::description = "Select Description";
+const QString SelectModule::description = "Narrows the input stream to the result of running a CSS selector on it.";
 
 SelectModule::SelectModule()
 {

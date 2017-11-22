@@ -2,7 +2,7 @@
 #include "modulelistitem.h"
 
 const QString ScopeModule::title = "Scope";
-const QString ScopeModule::description = "Scope Description";
+const QString ScopeModule::description = "Increases the scope of the input stream. Blocks in this scope must be indented. Initially does nothing, but when leaving it's indentation level it restores the input stream to what it was when it was when the scope block was reached.";
 
 ScopeModule::ScopeModule()
 {

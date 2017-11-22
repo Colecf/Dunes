@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString GetAttributeModule::title = "GetAttribute";
-const QString GetAttributeModule::description = "GetAttribute Description";
+const QString GetAttributeModule::description = "Gets an HTML attribute from the first element in the input stream. The value of the attribute will go to the input stream.";
 
 GetAttributeModule::GetAttributeModule()
 {

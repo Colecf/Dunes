@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString WhileModule::title = "While";
-const QString WhileModule::description = "While Description";
+const QString WhileModule::description = "Loops over the indented blocks below it while the condition is true.";
 
 WhileModule::WhileModule()
 {

@@ -5,7 +5,7 @@
 #include <QLineEdit>
 
 const QString ConstantModule::title = "Constant";
-const QString ConstantModule::description = "Constant Description";
+const QString ConstantModule::description = "Replaces the input stream with a constant value.";
 
 ConstantModule::ConstantModule()
 {
