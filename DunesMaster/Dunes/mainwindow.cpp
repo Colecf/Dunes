@@ -46,10 +46,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Setting up block diagram area
     m_blockarea = new BlockArea(this);
-    //m_blockarea->move(320, 0);
-    //m_blockarea->resize(640, 540);
-    //m_blockarea->createBlock("Scope");
-   // m_blockarea->getLayout()->setAlignment(Qt::AlignLeft);
 
     //Layout System
     //completeContainer is a layout that holds all layouts

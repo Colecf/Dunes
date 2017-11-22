@@ -22,7 +22,6 @@
 #include "modules/ifmodule.h"
 #include "modules/whilemodule.h"
 #include "modules/constantmodule.h"
-#include "modulelist.h"
 class BlockArea : public QScrollArea
 {
     Q_OBJECT

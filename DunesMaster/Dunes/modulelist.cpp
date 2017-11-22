@@ -30,5 +30,5 @@ void ModuleList::mouseMoveEvent(QMouseEvent *event)
         mimeData->setIndex(-1);
         drag->setMimeData(mimeData);
 
-        Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
+        drag->exec(Qt::CopyAction);
 }
