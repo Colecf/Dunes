@@ -10,5 +10,5 @@ AddColumnModule::AddColumnModule()
 }
 
 QString AddColumnModule::getCode(){
-    return "add_column(top())";
+    return "add_column(top());\n";
 }

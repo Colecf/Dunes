@@ -62,6 +62,6 @@ QString DownloadModule::getCode(){
         if(urlBox->text().length() == 0) {
             return COMPILE_ERROR;
         }
-        return "get_page("+urlBox->text()+")\n";
+        return "get_page(\""+escapeString(urlBox->text())+"\");\n";
     }
 }

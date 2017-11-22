@@ -82,6 +82,8 @@ signals:
     void keyPressed(BaseModule*, QKeyEvent*);
 
 protected:
+    QString escapeString(QString s);
+
     void keyPressEvent(QKeyEvent *) override;
 
     QLabel* m_titleLabel;

@@ -93,7 +93,7 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
     // whight: for now, this always creates blocks in the current nest
     BaseModule* module = BaseRegistry::createInstance(blockType);
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
-    int desiredRowSpan = 1, desiredColSpan = 2;
+    int desiredRowSpan = 1, desiredColSpan = 1;
     int row = 0, col = 0;
 
 
@@ -108,7 +108,7 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
 
 void BlockArea::moveBlocksDown(int module_location)
 {
-    int desiredRowSpan = 1, desiredColSpan = 2;
+    int desiredRowSpan = 1, desiredColSpan = 1;
     int row = 0, col = 0, rowSpan, colSpan;
     QWidget* prevWidget = nullptr;
     int mod_count = m_layout->count() - 1;

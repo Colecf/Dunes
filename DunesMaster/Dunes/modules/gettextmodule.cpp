@@ -10,5 +10,5 @@ GetTextModule::GetTextModule()
 }
 
 QString GetTextModule::getCode(){
-    return "boilerplateselect()";
+    return "get_text();\n";
 }

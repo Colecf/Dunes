@@ -86,6 +86,12 @@ void BaseModule::keyPressEvent(QKeyEvent *e)
     emit keyPressed(this, e);
 }
 
+QString BaseModule::escapeString(QString s) {
+    s.replace(QRegExp("\\"), "\\\\");
+    s.replace(QRegExp("\""), "\\\"");
+    return s;
+}
+
 /*  IN PROGRESS: INSERT FROM MODLIST INTO BLOCKAREA ANYWHERE
  * void BaseModule::dragEnterEvent(QDragEnterEvent *event)
 {
