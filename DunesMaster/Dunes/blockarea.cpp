@@ -32,7 +32,7 @@ bool BlockArea::createBlock(ModuleType blockType)
     //layout->addWidget(module);
     //m_layout->addWidget(indentedBlock);
 
-    m_layout->addWidget(module, m_layout->count(), 0, 1, 2);
+    m_layout->addWidget(module, m_layout->count(), 0, 1, 1);
     return true;
 }
 
@@ -63,7 +63,7 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
         }
 
         if(newCol != col) {
-            m_layout->addWidget(mod, row, newCol, 1, 2);
+            m_layout->addWidget(mod, row, newCol, 1, 1);
         }
 
         // Unindent everything after this if this was an unindent
@@ -197,7 +197,7 @@ void BlockArea::dropEvent(QDropEvent *event)
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
             if(module_location > index)
                 moveBlocksUp((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
-            m_layout->addWidget(block, module_location, 0, 1, 2);
+            m_layout->addWidget(block, module_location, 0, 1, 1);
             connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
         }
         else if(index > module_location)
@@ -206,7 +206,7 @@ void BlockArea::dropEvent(QDropEvent *event)
             QWidget *block = nullptr;
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
             moveBlocksDownUntil((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
-            m_layout->addWidget(block, module_location, 0, 1, 2);
+            m_layout->addWidget(block, module_location, 0, 1, 1);
             connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
         }
        event->acceptProposedAction();
