@@ -10,5 +10,5 @@ NextModule::NextModule()
 }
 
 QString NextModule::getCode(){
-    return "next()";
+    return "next();\n";
 }

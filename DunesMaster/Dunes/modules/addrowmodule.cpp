@@ -10,5 +10,5 @@ AddRowModule::AddRowModule()
 }
 
 QString AddRowModule::getCode(){
-    return "add_row()";
+    return "add_row();\n";
 }
