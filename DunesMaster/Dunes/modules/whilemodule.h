@@ -16,7 +16,7 @@ public:
     const static QString description;
 
 private:
-    QLineEdit* SelectBox;
+    QLineEdit* operand;
     QComboBox* inputTypeDropDown;
 
 };

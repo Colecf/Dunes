@@ -27,8 +27,8 @@ WhileModule::WhileModule()
     optionsLayout->addWidget(inputTypeLabel2, 1, 0);
     optionsLayout->addWidget(inputTypeDropDown, 0, 1);
 
-    SelectBox = new QLineEdit();
-    optionsLayout->addWidget(SelectBox, 1, 1);
+    operand = new QLineEdit();
+    optionsLayout->addWidget(operand, 1, 1);
 
     m_optionsPanel->setLayout(optionsLayout);
 
@@ -36,8 +36,15 @@ WhileModule::WhileModule()
 }
 
 QString WhileModule::getCode(){
-    if(SelectBox->text().length() == 0) {
+    if(operand->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    return "select("+SelectBox->text()+")";
+    QString code = "while(top() " + inputTypeDropDown->currentText() + " " + operand->text() + "){\n";
+    if((BaseModule*)this->children != NULL){
+        for(size_t i = 0; i < this->children->size(); i++){
+            code += "  " + this->children->at(i)->getCode();
+        }
+    }
+    code += "}\n";
+    return code;
 }
