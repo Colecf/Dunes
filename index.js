@@ -4,10 +4,6 @@ var fs = require('fs');
 
 
 var stack = [];
-const output_script = "dunes.csv";
-if(fs.existsSync(output_script)){
-    fs.truncateSync(output_script, 0);
-}
 
 function top(){
     return stack[stack.length-1];
@@ -87,6 +83,11 @@ function next(){
 	   html += $.html(this);
     });
     stack.push(html);
+}
+
+const output_script = "/Users/derekkwong/Desktop/dunes.csv";
+if(fs.existsSync(output_script)){
+    fs.truncateSync(output_script, 0);
 }
 
 constant("https://www.basketball-reference.com/leagues/NBA_1980.html")

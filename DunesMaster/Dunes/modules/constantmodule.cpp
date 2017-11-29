@@ -25,5 +25,5 @@ QString ConstantModule::getCode(){
     if(SelectBox->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    return "constant("+SelectBox->text()+");\n";
+    return "constant('"+SelectBox->text()+"');\n";
 }

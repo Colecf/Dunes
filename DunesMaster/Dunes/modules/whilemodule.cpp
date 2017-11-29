@@ -39,7 +39,7 @@ QString WhileModule::getCode(){
     if(operand->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    QString code = "while(top() " + inputTypeDropDown->currentText() + " " + operand->text() + "){\n";
+    QString code = "while(top() " + inputTypeDropDown->currentText() + " '" + operand->text() + "'){\n";
     if((BaseModule*)this->children != NULL){
         for(size_t i = 0; i < this->children->size(); i++){
             code += "  " + this->children->at(i)->getCode();

@@ -4,8 +4,12 @@
 #include <QSaveFile>
 #include <QTextStream>
 #include <QDir>
+#include <QFileDialog>
+#include <QStandardPaths>
 #include "codegen.h"
 #include "blockarea.h"
+
+const QString CodeGen::INITIAL_CODE = "var cheerio=require('cheerio');var request=require('sync-request');var fs=require('fs');var stack=[];function top(){return stack[stack.length-1]}function pop(){if(stack.length<0){console.error(\"Popping with empty stack\")}return stack.pop()}function get_page(url){if(stack.length>0){pop()}stack.push(request('GET',url).getBody())}function children(query,css){var $=query;var html=\"\";$(css).contents().each(function(i,elem){html+=$.html(this)});return html}function select_by_css(html,css,get_children=!1){var $=cheerio.load(html);pop();if(get_children){stack.push(children($,css))}else{stack.push($.html(css))}}function get_text(){var $=cheerio.load(top());pop();var ret=$(\"*\").first().text();stack.push(ret)}function add_row(){var data=fs.readFileSync(output_script);fs.truncateSync(output_script,data.length-1);fs.appendFileSync(output_script,'\\n')}function add_column(data){fs.appendFileSync(output_script,'\"'+data.replace(/\"/g,'\"\"')+'\",')}function scope(){stack.push(top())}function constant(data){if(stack.length>0){pop()}stack.push(data)}function attribute(attribute){var $=cheerio.load(pop());stack.push($(\"*\").first().attr(attribute))}function next(){var $=cheerio.load(top());pop();var html=\"\";$(\"*\").first().nextAll().each(function(i,elem){html+=$.html(this)});stack.push(html)}";
 
 CodeGen::CodeGen()
 {
@@ -59,6 +63,9 @@ QString CodeGen::generateCode(){
                 parentRowStack->push(row);
                 module->children = new std::vector<BaseModule*>;
             }
+            else if(dynamic_cast<IfModule*>(module) || dynamic_cast<WhileModule*>(module)){
+                module->children = new std::vector<BaseModule*>;
+            }
         }
         prevModuleCol = col;
     }
@@ -78,18 +85,71 @@ QString CodeGen::generateCode(){
     return code;
 }
 
-void CodeGen::writeCode(QString filename){
-    QString code = generateCode();
-    QDir curDir = QDir::current();
-    QString output = "output";
-    QString absolutePath = curDir.absolutePath() + "/" + output;
-    if(curDir.mkdir(output) || curDir.exists(output)){
-        QSaveFile qSaveFile(absolutePath+ "/" +filename);
-        if (qSaveFile.open(QIODevice::WriteOnly)) {
-            QTextStream stream(&qSaveFile);
-            stream << code;
-            qSaveFile.commit();
-            qInfo() << "saved to: " << absolutePath << endl;
+// writeCode for the generateButton
+void CodeGen::writeCode(){
+    QString code = INITIAL_CODE;
+    QString pathToCode = QFileDialog::getSaveFileName(m_blockarea, tr("Save generated code to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),  tr("Javascript (*.js)"));
+    writePackageJson(pathToCode);
+    QString pathToCSV = QFileDialog::getSaveFileName(m_blockarea, tr("Save CSV to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("CSV (*.csv)"));
+    code += "const output_script = '" + pathToCSV + "';if(fs.existsSync(output_script)){fs.truncateSync(output_script, 0);}\n" + generateCode();
+    QSaveFile qSaveFile(pathToCode);
+    if (qSaveFile.open(QIODevice::WriteOnly)) {
+        QTextStream stream(&qSaveFile);
+        stream << code;
+        qSaveFile.commit();
+        qInfo() << "saved to: " << pathToCode << endl;
+    }
+}
+
+//runCode for the runButton
+void CodeGen::runCode(){
+    QString code = INITIAL_CODE;
+    QString pathToCode = QDir::current().absolutePath() + "/output/" + "dunes_index.js";
+    QString pathToCSV = QFileDialog::getSaveFileName(m_blockarea, tr("Save CSV to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("CSV (*.csv)"));
+    code += "const output_script = '" + pathToCSV + "';if(fs.existsSync(output_script)){fs.truncateSync(output_script, 0);}\n" + generateCode();
+    QSaveFile qSaveFile(pathToCode);
+    if (qSaveFile.open(QIODevice::WriteOnly)) {
+        QTextStream stream(&qSaveFile);
+        stream << code;
+        qSaveFile.commit();
+        qInfo() << "saved to: " << pathToCode << endl;
+        if(pathToCSV != ""){
+            startProcess(pathToCode);
         }
     }
+}
+
+void CodeGen::writePackageJson(QString codePath){
+    QDir* path = new QDir(codePath);
+    if(path->cdUp()){
+        QString packageJsonPath = path->absolutePath() + "/package.json";
+        QString packageJson = "{\n\t\"main\": \"index.js\",\n\t\"dependencies\": {\n\t\t\"cheerio\": \"^0.22.0\",\n\t\t\"request\": \"^2.83.0\",\n\t\t\"sync-request\": \"^4.1.0\"\n\t},\n\t\"devDependencies\": {},\n\t\"author\": [\n\t\t\"Derek Kwong\",\n\t\t\"Cole Faust\"\n\t]\n}";
+        QSaveFile qSaveFile(packageJsonPath);
+        if(qSaveFile.open(QIODevice::WriteOnly)){
+            QTextStream stream(&qSaveFile);
+            stream << packageJson;
+            qSaveFile.commit();
+            qInfo() << "packageJson saved to: " << packageJsonPath << endl;
+        }
+    }
+
+}
+
+void CodeGen::startProcess(QString codePath){
+    // Add loading symbol?
+    QProcess *nodeProcess = new QProcess(this);
+    nodeProcess->setStandardOutputFile(QDir::current().absolutePath() + "/output/" + "standardOutFile");
+    nodeProcess->setStandardErrorFile(QDir::current().absolutePath() + "/output/" + "standardErrFile");
+    nodeProcess->start("/usr/local/bin/node " + codePath);
+    connect(nodeProcess, SIGNAL(finished(int)), this, SLOT(finishProcess(int)));
+    connect(nodeProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(finishProcessError(QProcess::ProcessError)));
+}
+
+void CodeGen::finishProcessError(QProcess::ProcessError error){
+    qInfo() << "errored out: " << error;
+}
+
+void CodeGen::finishProcess(int exitCode){
+    // End loading symbol?
+    qInfo() << "finished: " << exitCode;
 }

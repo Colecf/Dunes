@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::mainWindow = test;
     codeGen = new CodeGen(m_blockarea);
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
+    connect(runButton, SIGNAL(released()), codeGen, SLOT(runCode()));
     connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
 }
 
@@ -97,7 +98,9 @@ void MainWindow::makeBlock(QListWidgetItem* blockItem)
 
 void MainWindow::createTopLayout(){
     top_layout = new QHBoxLayout();
+    runButton = new QPushButton("Run Code");
     generateButton = new QPushButton("Generate");
+    top_layout->addWidget(runButton);
     top_layout->addWidget(generateButton);
 }
 

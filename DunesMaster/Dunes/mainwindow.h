@@ -39,6 +39,7 @@ private:
     QBoxLayout *box;
     QHBoxLayout *top_layout;
     QVBoxLayout *completeContainer;
+    QPushButton *runButton;
     QPushButton *generateButton;
     CodeGen *codeGen;
 };

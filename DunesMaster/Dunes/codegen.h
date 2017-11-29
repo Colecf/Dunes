@@ -2,6 +2,7 @@
 #define CODEGEN_H
 
 #include <QGridLayout>
+#include <QProcess>
 #include "blockarea.h"
 
 
@@ -12,10 +13,16 @@ public:
     CodeGen();
     CodeGen(BlockArea *blockarea);
 private slots:
-    void writeCode(QString filename = "dunes_index.js");
+    void writeCode();
+    void runCode();
+    void finishProcess(int exitCode);
+    void finishProcessError(QProcess::ProcessError error);
 private:
     QString generateCode();
+    void startProcess(QString codePath);
+    void writePackageJson(QString codePath);
     BlockArea *m_blockarea;
+    static const QString INITIAL_CODE;
 };
 
 #endif // CODEGEN_H

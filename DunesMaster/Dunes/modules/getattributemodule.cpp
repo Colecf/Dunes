@@ -25,5 +25,5 @@ QString GetAttributeModule::getCode(){
     if(SelectBox->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    return "attribute("+SelectBox->text()+");\n";
+    return "attribute('"+SelectBox->text()+"');\n";
 }
