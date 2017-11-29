@@ -139,7 +139,7 @@ void BlockArea::moveBlocksUp(int start, int end)
     QWidget* prevWidget = nullptr;
     start++;
     std::unordered_map<int, int> *rowToCol = createRowToCol();
-    for(; start <= end; start++)
+    for(; start < end; start++)
     {
         prevWidget = m_layout->itemAtPosition(start, getCol(rowToCol, start))->widget();
         m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
@@ -225,8 +225,9 @@ void BlockArea::dropEvent(QDropEvent *event)
             std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *block = nullptr;
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
+            m_layout->removeWidget(block);
             moveBlocksUp(index, module_location);
-            m_layout->addWidget(block, module_location, 0, 1, 1);
+            m_layout->addWidget(block, module_location - 1, 0, 1, 1);
             connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
         }
         else if(index > module_location)
