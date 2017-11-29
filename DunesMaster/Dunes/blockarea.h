@@ -36,6 +36,7 @@ public:
     QGridLayout* getLayout();
     std::unordered_map<int, int>* createRowToCol();
     int getCol(const std::unordered_map<int, int> *dict, int row);
+    int getLastRow();
 private slots:
     void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
 private:

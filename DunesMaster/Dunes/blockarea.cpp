@@ -84,6 +84,18 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
                 }
             }
         }
+    } else if(event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
+        int row, col, rowSpan, colSpan;
+        if(m_layout->indexOf(mod) < 0) {
+            // We should never get here
+            qInfo() << "ERROR: Negative index when trying to remove module!!\n";
+            return;
+        }
+        m_layout->getItemPosition(m_layout->indexOf(mod), &row, &col, &rowSpan, &colSpan);
+        m_layout->removeWidget(mod);
+        mod->setParent(NULL);
+
+        moveBlocksUp(row+1, -1);
     }
 }
 
@@ -135,13 +147,21 @@ void BlockArea::moveBlocksDownUntil(int start, int end)
 
 void BlockArea::moveBlocksUp(int start, int end)
 {
+    int lastRow = getLastRow();
+    if(end > lastRow || end < 0)
+        end = lastRow;
+    if(start < 0)
+        return;
     int desiredRowSpan = 1, desiredColSpan = 1;
     QWidget* prevWidget = nullptr;
     start++;
     std::unordered_map<int, int> *rowToCol = createRowToCol();
     for(; start < end; start++)
     {
-        prevWidget = m_layout->itemAtPosition(start, getCol(rowToCol, start))->widget();
+        int col = getCol(rowToCol, start);
+        if(col < 0)
+            return;
+        prevWidget = m_layout->itemAtPosition(start, col)->widget();
         m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
 }
@@ -262,5 +282,15 @@ int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
         return -1;
     }
     return found->second;
+}
 
+int BlockArea::getLastRow() {
+    int row, col, rowSpan, colSpan;
+    int largest = 0;
+    for(int idx = 0; idx < m_layout->count(); idx++){
+        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
+        if(row > largest)
+            largest = row;
+    }
+    return largest;
 }
