@@ -137,7 +137,7 @@ void BlockArea::moveBlocksUp(int start, int end)
 {
     int desiredRowSpan = 1, desiredColSpan = 1;
     QWidget* prevWidget = nullptr;
-
+    start++;
     std::unordered_map<int, int> *rowToCol = createRowToCol();
     for(; start <= end; start++)
     {
@@ -156,9 +156,40 @@ void BlockArea::dragEnterEvent(QDragEnterEvent *event)
       QScrollArea::dragEnterEvent(event);
 }
 
+void BlockArea::dragMoveEvent(QDragMoveEvent *event)
+{
+    if(m_layout->count() > 0 && line != nullptr)
+    {
+
+        int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
+        int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+        int end_module_pix = module_location * (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+        if(module_location != cur_line_location)
+        {
+            if(module_location > m_layout->count())
+            {
+                end_module_pix = m_layout->count() * (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+            }
+            delete line;
+            line = new QFrame(m_layout->parentWidget());
+            line->setObjectName("Line");
+            line->setGeometry(0, end_module_pix + m_layout->verticalSpacing() / 2, m_layout->parentWidget()->size().width(), m_layout->verticalSpacing());
+            line->setLineWidth(m_layout->verticalSpacing() / 2);
+            line->setFrameShape(QFrame::HLine);
+            line->setFrameShadow(QFrame::Plain);
+            line->setStyleSheet("#Line { color: green;}");
+            line->show();
+            cur_line_location = module_location;
+        }
+    }
+    else
+    {
+        line = new QFrame(m_layout->parentWidget());
+    }
+}
+
 void BlockArea::dropEvent(QDropEvent *event)
 {
-
     const QMimeData* itemData = event->mimeData();
     int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
     if(((PassData*)itemData)->getIndex() == FROM_MOD_LIST)
@@ -170,7 +201,6 @@ void BlockArea::dropEvent(QDropEvent *event)
             event->acceptProposedAction();
             return;
         }
-        //qInfo() << m_layout->parentWidget()->mapFrom(this, event->pos()) << m_layout->parentWidget()->geometry();
         int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
         //qInfo() << module_location << event->pos().y() <<(m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
 
@@ -190,13 +220,12 @@ void BlockArea::dropEvent(QDropEvent *event)
         int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
         if(module_location > index)
         {
-            if(module_location >= m_layout->count())
+            if(module_location > m_layout->count())
                 module_location = m_layout->count() - 1;
             std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *block = nullptr;
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
-            if(module_location > index)
-                moveBlocksUp((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
+            moveBlocksUp(index, module_location);
             m_layout->addWidget(block, module_location, 0, 1, 1);
             connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
         }
@@ -205,7 +234,7 @@ void BlockArea::dropEvent(QDropEvent *event)
             std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *block = nullptr;
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
-            moveBlocksDownUntil((index < module_location) ? index : module_location, (index > module_location) ? index : module_location);
+            moveBlocksDownUntil(module_location, index);
             m_layout->addWidget(block, module_location, 0, 1, 1);
             connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
         }
