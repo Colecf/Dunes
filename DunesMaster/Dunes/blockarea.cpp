@@ -87,12 +87,13 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
     } else if(event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
         int row, col, rowSpan, colSpan;
         if(m_layout->indexOf(mod) < 0) {
-            qInfo() << "Negative index!!\n";
+            // We should never get here
+            qInfo() << "ERROR: Negative index when trying to remove module!!\n";
+            return;
         }
         m_layout->getItemPosition(m_layout->indexOf(mod), &row, &col, &rowSpan, &colSpan);
         m_layout->removeWidget(mod);
         mod->setParent(NULL);
-        qInfo() << "Deleting a module at " << row << ", " << col << "\n";
 
         moveBlocksUp(row+1, -1);
     }
