@@ -49,7 +49,7 @@ function select_by_css(html, css, get_children=false){
 function get_text(){
     var $ = cheerio.load(top());
     pop();
-    var ret = $(html).first().text();
+    var ret = $("*").first().text();
     stack.push(ret);
 }
 
