@@ -6,6 +6,8 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include "codegen.h"
 #include "blockarea.h"
 

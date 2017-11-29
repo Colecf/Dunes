@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
     connect(runButton, SIGNAL(released()), codeGen, SLOT(runCode()));
     connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
+    connect(optionsButton, SIGNAL(released()), options, SLOT(showOptions()));
 }
 
 void MainWindow::updateDesc()
@@ -97,11 +98,14 @@ void MainWindow::makeBlock(QListWidgetItem* blockItem)
 }
 
 void MainWindow::createTopLayout(){
+    options = new OptionsMenu();
     top_layout = new QHBoxLayout();
     runButton = new QPushButton("Run Code");
     generateButton = new QPushButton("Generate");
+    optionsButton = new QPushButton("Options");
     top_layout->addWidget(runButton);
     top_layout->addWidget(generateButton);
+    top_layout->addWidget(optionsButton);
 }
 
 void MainWindow::createCompleteContainer(){

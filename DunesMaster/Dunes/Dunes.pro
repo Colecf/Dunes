@@ -44,7 +44,8 @@ SOURCES += \
     codegen.cpp \
     modules/ifmodule.cpp \
     modules/whilemodule.cpp \
-    modules/constantmodule.cpp
+    modules/constantmodule.cpp \
+    optionsmenu.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -66,6 +67,7 @@ HEADERS += \
     codegen.h \
     modules/ifmodule.h \
     modules/whilemodule.h \
-    modules/constantmodule.h
+    modules/constantmodule.h \
+    optionsmenu.h
 
 FORMS +=
