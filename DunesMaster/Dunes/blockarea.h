@@ -8,6 +8,7 @@
 #include <QMimeData>
 #include <QListWidgetItem>
 #include <unordered_map>
+#include <QFrame>
 #include "modulelistitem.h"
 #include "modules/basemodule.h"
 #include "modules/scopemodule.h"
@@ -41,7 +42,12 @@ private slots:
 private:
     QGridLayout* m_layout;
     void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
+    int cur_line_location = -1;
+    QFrame *line = nullptr;
+    //void paintEvent(QPaintEvent *event);
+
 };
 
 #endif // BLOCKAREA_H
