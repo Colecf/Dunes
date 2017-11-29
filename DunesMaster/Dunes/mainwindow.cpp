@@ -80,10 +80,14 @@ MainWindow::MainWindow(QWidget *parent) :
     test->setLayout(completeContainer);
 
     BaseModule::mainWindow = test;
+
     codeGen = new CodeGen(m_blockarea);
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
     connect(runButton, SIGNAL(released()), codeGen, SLOT(runCode()));
     connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
+
+    saveLoad = new SaveLoad(m_blockarea);
+    connect(saveButton, SIGNAL(released()), saveLoad, SLOT(save()));
 }
 
 void MainWindow::updateDesc()
@@ -100,8 +104,12 @@ void MainWindow::createTopLayout(){
     top_layout = new QHBoxLayout();
     runButton = new QPushButton("Run Code");
     generateButton = new QPushButton("Generate");
+    saveButton = new QPushButton("Save..");
+    loadButton = new QPushButton("Load..");
     top_layout->addWidget(runButton);
     top_layout->addWidget(generateButton);
+    top_layout->addWidget(saveButton);
+    top_layout->addWidget(loadButton);
 }
 
 void MainWindow::createCompleteContainer(){

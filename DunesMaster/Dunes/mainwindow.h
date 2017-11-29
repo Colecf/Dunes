@@ -11,6 +11,7 @@
 #include "modulelist.h"
 #include "blockarea.h"
 #include "codegen.h"
+#include "saveload.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,7 +42,10 @@ private:
     QVBoxLayout *completeContainer;
     QPushButton *runButton;
     QPushButton *generateButton;
+    QPushButton *saveButton;
+    QPushButton *loadButton;
     CodeGen *codeGen;
+    SaveLoad *saveLoad;
 };
 
 #endif // MAINWINDOW_H
