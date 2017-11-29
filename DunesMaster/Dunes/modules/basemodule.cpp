@@ -67,30 +67,27 @@ void BaseModule::mouseMoveEvent(QMouseEvent *event)
     {
         return;
     }
-        QDrag *drag = new QDrag(this);
-        PassData *mimeData = new PassData;
-        QGridLayout *blockArea = (QGridLayout *)parentWidget()->layout();
-        std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
-        for(int idx = 0; idx < blockArea->count(); idx++){
-            int row, col, rowSpan, colSpan;
-            blockArea->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
+    QDrag *drag = new QDrag(this);
+    PassData *mimeData = new PassData;
+    QGridLayout *blockArea = (QGridLayout *)parentWidget()->layout();
+    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
+    for(int idx = 0; idx < blockArea->count(); idx++){
+        int row, col, rowSpan, colSpan;
+        blockArea->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
 
-            rowToCol->insert({row, col});
-        }
+        rowToCol->insert({row, col});
+    }
 
-        for(int iter = 0; iter < blockArea->count(); iter++)
+    for(const std::pair<int, int>& p : *rowToCol)
+    {
+        if(blockArea->itemAtPosition(p.first, p.second)->widget() == this)
         {
-            auto found = rowToCol->find(iter);
-            if(found == rowToCol->end()){
-                qErrnoWarning("Error: Could not find Block given key %d", iter);
-            }
-            else if(blockArea->itemAtPosition(iter, found->second)->widget() == this)
-            {
-                mimeData->setIndex(iter);
-            }
+            mimeData->setIndex(p.first);
         }
-        drag->setMimeData(mimeData);
-        drag->exec(Qt::MoveAction);
+    }
+    delete rowToCol;
+    drag->setMimeData(mimeData);
+    drag->exec(Qt::MoveAction);
 }
 void BaseModule::keyPressEvent(QKeyEvent *e)
 {
