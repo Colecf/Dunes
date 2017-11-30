@@ -7,6 +7,7 @@ class ForEachModule : public BaseModule
 public:
     ForEachModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleForEach;
 

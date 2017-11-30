@@ -48,3 +48,8 @@ QString WhileModule::getCode(){
     code += "}\n";
     return code;
 }
+
+QString WhileModule::getConfig(QString col){
+    return title + col + "inputTypeDropDown=" + inputTypeDropDown->currentIndex() + "Operand=" + operand->text() + "\n";
+}
+

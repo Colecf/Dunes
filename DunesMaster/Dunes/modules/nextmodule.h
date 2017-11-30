@@ -7,6 +7,7 @@ class NextModule : public BaseModule
 public:
     NextModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleNext;
 

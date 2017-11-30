@@ -12,3 +12,7 @@ AddColumnModule::AddColumnModule()
 QString AddColumnModule::getCode(){
     return "add_column(top());\n";
 }
+
+QString AddColumnModule::getConfig(QString col){
+    return title + col + "\n";
+}

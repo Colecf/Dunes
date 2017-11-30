@@ -65,3 +65,7 @@ QString DownloadModule::getCode(){
         return "get_page(\""+escapeString(urlBox->text())+"\");\n";
     }
 }
+
+QString DownloadModule::getConfig(QString col){
+    return title + col + "inputTypeDropDown=" + inputTypeDropDown->currentIndex()+";url=" + urlBox->text() + "\n";
+}

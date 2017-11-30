@@ -19,3 +19,7 @@ QString ScopeModule::getCode(){
     code += "pop();\n";
     return code;
 }
+
+QString ScopeModule::getConfig(QString col){
+    return title + col + "\n";
+}

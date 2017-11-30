@@ -27,3 +27,8 @@ QString ConstantModule::getCode(){
     }
     return "constant('"+SelectBox->text()+"');\n";
 }
+
+QString ConstantModule::getConfig(QString col){
+    return title + col + "Value=" + SelectBox->text() + "\n";
+}
+
