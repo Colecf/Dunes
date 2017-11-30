@@ -27,3 +27,8 @@ QString SelectModule::getCode(){
     }
     return "select_by_css(top(),'"+SelectBox->text()+"');\n";
 }
+
+QString SelectModule::getConfig(QString col){
+    return title + col + "CSS Selector=" + SelectBox->text() + "\n";
+}
+

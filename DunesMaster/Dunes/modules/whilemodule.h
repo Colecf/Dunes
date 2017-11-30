@@ -9,6 +9,7 @@ class WhileModule : public BaseModule
 public:
     WhileModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleWhile;
 

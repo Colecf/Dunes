@@ -7,6 +7,7 @@ class ScopeModule : public BaseModule
 public:
     ScopeModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleScope;
 

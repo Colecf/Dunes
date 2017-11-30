@@ -12,3 +12,7 @@ GetParentModule::GetParentModule()
 QString GetParentModule::getCode(){
     return "boilerplateselect()";
 }
+
+QString GetParentModule::getConfig(QString col){
+    return title + col + "\n";
+}

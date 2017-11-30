@@ -12,3 +12,7 @@ GetTextModule::GetTextModule()
 QString GetTextModule::getCode(){
     return "get_text();\n";
 }
+
+QString GetTextModule::getConfig(QString col){
+    return title + col + "\n";
+}

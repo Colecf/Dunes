@@ -8,6 +8,7 @@ class ConstantModule : public BaseModule
 public:
     ConstantModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleConstant;
 

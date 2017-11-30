@@ -9,6 +9,7 @@ class IfModule : public BaseModule
 public:
     IfModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleIf;
 

@@ -12,3 +12,7 @@ AddRowModule::AddRowModule()
 QString AddRowModule::getCode(){
     return "add_row();\n";
 }
+
+QString AddRowModule::getConfig(QString col){
+    return title + col + "\n";
+}

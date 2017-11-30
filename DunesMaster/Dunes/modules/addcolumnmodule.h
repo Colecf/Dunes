@@ -7,6 +7,7 @@ class AddColumnModule : public BaseModule
 public:
     AddColumnModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleAddColumn;
 

@@ -12,3 +12,7 @@ NextModule::NextModule()
 QString NextModule::getCode(){
     return "next();\n";
 }
+
+QString NextModule::getConfig(QString col){
+    return title + col + "\n";
+}
