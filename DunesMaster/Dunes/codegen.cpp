@@ -17,9 +17,14 @@ CodeGen::CodeGen()
 {
 }
 
-CodeGen::CodeGen(BlockArea *blockarea)
+CodeGen::CodeGen(BlockArea *blockarea, OptionsMenu *optionsm)
 {
     m_blockarea = blockarea;
+    options = optionsm;
+    nodeProcess = new QProcess(this);
+    npmProcess = new QProcess(this);
+    alert = new QMessageBox();
+    alert->setText("Please set your node and npm paths!");
 }
 
 QString CodeGen::generateCode(){
@@ -30,7 +35,7 @@ QString CodeGen::generateCode(){
     QGridLayout *m_layout = m_blockarea->getLayout();
     std::stack<int> *parentRowStack = new std::stack<int>;
     for(int row = 0; row < m_layout->count(); row++){
-        int col, prevModuleCol;
+        int col;
         if((col = m_blockarea->getCol(rowToCol, row)) == -1){
             qErrnoWarning("Error: col must integer >= 0");
             return NULL;
@@ -69,7 +74,6 @@ QString CodeGen::generateCode(){
                 module->children = new std::vector<BaseModule*>;
             }
         }
-        prevModuleCol = col;
     }
     for(int row = 0; row < m_layout->count(); row++){
         int col;
@@ -103,10 +107,20 @@ void CodeGen::writeCode(){
     }
 }
 
+bool CodeGen::checkNodeAndNpmPaths(){
+    return (options->getNodePath().length() != 0 || options->getNpmPath().length() != 0);
+}
+
 //runCode for the runButton
 void CodeGen::runCode(){
+    if(!checkNodeAndNpmPaths()){
+        alert->setText("Please set your node and npm paths!");
+        alert->exec();
+        return;
+    }
     QString code = INITIAL_CODE;
     QString pathToCode = QDir::current().absolutePath() + "/output/" + "dunes_index.js";
+    QString packagePath = writePackageJson(pathToCode);
     QString pathToCSV = QFileDialog::getSaveFileName(m_blockarea, tr("Save CSV to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("CSV (*.csv)"));
     code += "const output_script = '" + pathToCSV + "';if(fs.existsSync(output_script)){fs.truncateSync(output_script, 0);}\n" + generateCode();
     QSaveFile qSaveFile(pathToCode);
@@ -116,12 +130,12 @@ void CodeGen::runCode(){
         qSaveFile.commit();
         qInfo() << "saved to: " << pathToCode << endl;
         if(pathToCSV != ""){
-            startProcess(pathToCode);
+            startProcess(pathToCode,packagePath);
         }
     }
 }
 
-void CodeGen::writePackageJson(QString codePath){
+QString CodeGen::writePackageJson(QString codePath){
     QDir* path = new QDir(codePath);
     if(path->cdUp()){
         QString packageJsonPath = path->absolutePath() + "/package.json";
@@ -132,26 +146,50 @@ void CodeGen::writePackageJson(QString codePath){
             stream << packageJson;
             qSaveFile.commit();
             qInfo() << "packageJson saved to: " << packageJsonPath << endl;
+            return packageJsonPath;
         }
     }
-
+    return "";
 }
 
-void CodeGen::startProcess(QString codePath){
+void CodeGen::startProcess(QString codePath, QString packageJsonPath){
     // Add loading symbol?
-    QProcess *nodeProcess = new QProcess(this);
-    nodeProcess->setStandardOutputFile(QDir::current().absolutePath() + "/output/" + "standardOutFile");
-    nodeProcess->setStandardErrorFile(QDir::current().absolutePath() + "/output/" + "standardErrFile");
-    nodeProcess->start("/usr/local/bin/node " + codePath);
-    connect(nodeProcess, SIGNAL(finished(int)), this, SLOT(finishProcess(int)));
+    npmProcess->setStandardOutputFile(QDir::current().absolutePath() + "/npm/" + "standardOutFile");
+    npmProcess->setStandardErrorFile(QDir::current().absolutePath() + "/npm/" + "standardErrFile");
+    QString npmPath = options->getNpmPath();
+    // make sure npmProcess is in same directory as packageJson
+    npmProcess->start(npmPath + " install");
+    connect(npmProcess, SIGNAL(finished(int)), this, SLOT(finishedNpmProcess(int)));
+    connect(npmProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(finishProcessError(QProcess::ProcessError)));
+
+    nodeProcess->setStandardOutputFile(QDir::current().absolutePath() + "/node/" + "standardOutFile");
+    nodeProcess->setStandardErrorFile(QDir::current().absolutePath() + "/node/" + "standardErrFile");
+    QString nodePath = options->getNodePath();
+    nodeProcess->setProgram(nodePath + " " + codePath);
+    connect(nodeProcess, SIGNAL(finished(int)), this, SLOT(finishedNodeProcess(int)));
     connect(nodeProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(finishProcessError(QProcess::ProcessError)));
 }
 
 void CodeGen::finishProcessError(QProcess::ProcessError error){
+    alert->setText("Error: " + QString::number(error));
+    alert->exec();
     qInfo() << "errored out: " << error;
 }
 
-void CodeGen::finishProcess(int exitCode){
-    // End loading symbol?
-    qInfo() << "finished: " << exitCode;
+void CodeGen::finishedNpmProcess(int status){
+    if(status == 0){
+        qInfo() << "NPM installed correctly";
+        nodeProcess->start();
+    }
+    else{
+        alert->setText("NPM failed to finish");
+        alert->exec();
+    }
+    qInfo() << "NPM finished with status: " << status;
+}
+
+void CodeGen::finishedNodeProcess(int status){
+    alert->setText("Script ran!");
+    alert->exec();
+    qInfo() << "Node finished with status: " << status;
 }
