@@ -1,5 +1,8 @@
 #include <QDialogButtonBox>
 #include <QDebug>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QStandardPaths>
 #include "optionsmenu.h"
 
 OptionsMenu::OptionsMenu()
@@ -13,8 +16,8 @@ OptionsMenu::OptionsMenu()
     this->setModal(true);
     nodeLabel = new QLabel("Node Path:");
     npmLabel = new QLabel("NPM Path: ");
-    nodeLineEdit = new QLineEdit();
-    npmLineEdit = new QLineEdit();
+    nodeLineEdit = new ExistingFileDialog();
+    npmLineEdit = new ExistingFileDialog();
     nodeLayout->addWidget(nodeLabel);
     nodeLayout->addWidget(nodeLineEdit);
     npmLayout->addWidget(npmLabel);

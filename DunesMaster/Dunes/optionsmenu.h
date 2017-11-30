@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QVBoxLayout>
+#include "existingfiledialog.h"
 
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
@@ -22,9 +23,9 @@ private slots:
     void saveChanges();
 private:
     QLabel *nodeLabel;
-    QLineEdit *nodeLineEdit;
+    ExistingFileDialog *nodeLineEdit;
     QLabel *npmLabel;
-    QLineEdit *npmLineEdit;
+    ExistingFileDialog *npmLineEdit;
     QVBoxLayout *layout;
     QHBoxLayout *nodeLayout;
     QHBoxLayout *npmLayout;
