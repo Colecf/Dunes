@@ -48,7 +48,6 @@ private:
     OptionsMenu *options;
     QPushButton *saveButton;
     QPushButton *loadButton;
-    CodeGen *codeGen;
     SaveLoad *saveLoad;
 };
 
