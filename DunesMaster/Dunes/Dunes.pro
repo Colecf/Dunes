@@ -45,7 +45,8 @@ SOURCES += \
     modules/ifmodule.cpp \
     modules/whilemodule.cpp \
     modules/constantmodule.cpp \
-    optionsmenu.cpp
+    optionsmenu.cpp \
+    existingfiledialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -68,6 +69,7 @@ HEADERS += \
     modules/ifmodule.h \
     modules/whilemodule.h \
     modules/constantmodule.h \
-    optionsmenu.h
+    optionsmenu.h \
+    existingfiledialog.h
 
 FORMS +=
