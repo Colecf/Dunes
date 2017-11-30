@@ -85,6 +85,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(runButton, SIGNAL(released()), codeGen, SLOT(runCode()));
     connect(generateButton, SIGNAL(released()), codeGen, SLOT(writeCode()));
     connect(optionsButton, SIGNAL(released()), options, SLOT(showOptions()));
+
+    saveLoad = new SaveLoad(m_blockarea);
+    connect(saveButton, SIGNAL(released()), saveLoad, SLOT(save()));
 }
 
 void MainWindow::updateDesc()
@@ -103,9 +106,13 @@ void MainWindow::createTopLayout(){
     runButton = new QPushButton("Run Code");
     generateButton = new QPushButton("Generate");
     optionsButton = new QPushButton("Options");
+    saveButton = new QPushButton("Save..");
+    loadButton = new QPushButton("Load..");
     top_layout->addWidget(runButton);
     top_layout->addWidget(generateButton);
     top_layout->addWidget(optionsButton);
+    top_layout->addWidget(saveButton);
+    top_layout->addWidget(loadButton);
 }
 
 void MainWindow::createCompleteContainer(){

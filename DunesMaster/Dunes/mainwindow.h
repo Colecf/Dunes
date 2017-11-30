@@ -12,6 +12,7 @@
 #include "blockarea.h"
 #include "codegen.h"
 #include "optionsmenu.h"
+#include "saveload.h"
 
 namespace Ui {
 class MainWindow;
@@ -45,6 +46,10 @@ private:
     QPushButton *optionsButton;
     CodeGen *codeGen;
     OptionsMenu *options;
+    QPushButton *saveButton;
+    QPushButton *loadButton;
+    CodeGen *codeGen;
+    SaveLoad *saveLoad;
 };
 
 #endif // MAINWINDOW_H

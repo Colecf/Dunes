@@ -27,3 +27,7 @@ QString GetAttributeModule::getCode(){
     }
     return "attribute('"+SelectBox->text()+"');\n";
 }
+
+QString GetAttributeModule::getConfig(QString col){
+    return title + col + "attribute=" + SelectBox->text() +"\n";
+}

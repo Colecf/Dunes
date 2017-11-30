@@ -49,3 +49,7 @@ QString IfModule::getCode(){
     code += "}\n";
     return code;
 }
+
+QString IfModule::getConfig(QString col){
+    return title + col + "inputTypeDropDown=" + inputTypeDropDown->currentIndex() + "Operand=" + operand->text() + "\n";
+}

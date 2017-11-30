@@ -14,6 +14,7 @@ public:
     DownloadModule();
     virtual ~DownloadModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleDL;
 

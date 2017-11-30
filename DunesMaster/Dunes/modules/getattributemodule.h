@@ -8,6 +8,7 @@ class GetAttributeModule : public BaseModule
 public:
     GetAttributeModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleGetAttribute;
 

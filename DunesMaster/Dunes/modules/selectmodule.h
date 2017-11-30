@@ -8,6 +8,7 @@ class SelectModule : public BaseModule
 public:
     SelectModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleSelect;
 

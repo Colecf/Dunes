@@ -7,6 +7,7 @@ class AddRowModule : public BaseModule
 public:
     AddRowModule();
     QString getCode();
+    QString getConfig(QString col);
 
     const static ModuleType type = ModuleAddRow;
 

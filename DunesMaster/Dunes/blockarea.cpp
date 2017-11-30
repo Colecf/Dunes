@@ -9,6 +9,11 @@ BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
     QWidget* widget = new QWidget;
     m_layout = new QGridLayout;
     m_layout->setAlignment(Qt::AlignTop);
+
+    //TODO you shouldn't need this, but on mac vertical spacing is -1 for some reason
+#ifdef __APPLE__
+    m_layout->setVerticalSpacing(6);
+#endif
     widget->setLayout(m_layout);
     setWidget(widget);
     setWidgetResizable(true);
@@ -156,7 +161,7 @@ void BlockArea::moveBlocksUp(int start, int end)
     QWidget* prevWidget = nullptr;
     start++;
     std::unordered_map<int, int> *rowToCol = createRowToCol();
-    for(; start < end; start++)
+    for(; start <= end; start++)
     {
         int col = getCol(rowToCol, start);
         if(col < 0)
@@ -164,6 +169,7 @@ void BlockArea::moveBlocksUp(int start, int end)
         prevWidget = m_layout->itemAtPosition(start, col)->widget();
         m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
+    delete rowToCol;
 }
 QGridLayout* BlockArea::getLayout()
 {
@@ -180,7 +186,6 @@ void BlockArea::dragMoveEvent(QDragMoveEvent *event)
 {
     if(m_layout->count() > 0 && line != nullptr)
     {
-
         int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
         int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
         int end_module_pix = module_location * (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
@@ -237,29 +242,26 @@ void BlockArea::dropEvent(QDropEvent *event)
     else
     {
         int index = ((PassData*)itemData)->getIndex();
-        int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
-        if(module_location > index)
+        int drop_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+        if(drop_location > index)
         {
-            if(module_location > m_layout->count())
-                module_location = m_layout->count() - 1;
+            if(drop_location >= m_layout->count())
+                drop_location = m_layout->count()-1;
             std::unordered_map<int, int> *rowToCol = createRowToCol();
-            QWidget *block = nullptr;
-            block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
-            m_layout->removeWidget(block);
-            moveBlocksUp(index, module_location);
-            m_layout->addWidget(block, module_location - 1, 0, 1, 1);
-            connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+            QWidget *draggedBlock = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
+            m_layout->removeWidget(draggedBlock);
+            moveBlocksUp(index, drop_location);
+            m_layout->addWidget(draggedBlock, drop_location, 0, 1, 1);
         }
-        else if(index > module_location)
+        else if(index > drop_location)
         {
             std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *block = nullptr;
             block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
-            moveBlocksDownUntil(module_location, index);
-            m_layout->addWidget(block, module_location, 0, 1, 1);
-            connect(block, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+            moveBlocksDownUntil(drop_location, index);
+            m_layout->addWidget(block, drop_location, 0, 1, 1);
         }
-       event->acceptProposedAction();
+        event->acceptProposedAction();
     }
     QScrollArea::dropEvent(event);
 

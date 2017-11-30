@@ -12,3 +12,7 @@ ForEachModule::ForEachModule()
 QString ForEachModule::getCode(){
     return "boilerplateselect()";
 }
+
+QString ForEachModule::getConfig(QString col){
+    return title + col + "\n";
+}
