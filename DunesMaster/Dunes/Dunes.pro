@@ -75,3 +75,6 @@ HEADERS += \
     saveload.h
 
 FORMS +=
+
+RESOURCES += \
+    resources.qrc

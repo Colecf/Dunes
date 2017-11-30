@@ -30,7 +30,7 @@ private:
     BlockArea *m_blockarea;
     OptionsMenu *options;
     QMessageBox *alert;
-    static const QString INITIAL_CODE;
+    static QString INITIAL_CODE;
 };
 
 #endif // CODEGEN_H
