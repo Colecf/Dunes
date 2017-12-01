@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Initilize UI
     //Module list
     m_modList = new ModuleList(this);
-   // m_modList->resize(320, 360);
 
     BaseModule::setUp<DownloadModule>(m_modList);
     BaseModule::setUp<ScopeModule>(m_modList);
@@ -55,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Left layout. Module list + description
     left_layout = new QVBoxLayout();
-    //m_modList->setSizePolicy(QSizePolicy::Minimum);
     left_layout->addWidget(m_modList);
     left_layout->addWidget(m_desc);
     left_layout->setAlignment(m_modList, Qt::AlignLeft);
@@ -68,18 +66,11 @@ MainWindow::MainWindow(QWidget *parent) :
     box->addWidget(m_blockarea);
     box->addWidget(right_layout);
 
+    QWidget *mainWidget = new QWidget(this);
+    this->setCentralWidget(mainWidget);
+    mainWidget->setLayout(completeContainer);
 
-    //layout->setAlignment(m_blockarea->getLayout(), Qt::AlignHCenter);
-
-    //this->setLayout(layout);
-    //layout->setAlignment(m_blockarea, Qt::AlignCenter);
-
-    QWidget *test = new QWidget(this);
-    //test->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
-    this->setCentralWidget(test);
-    test->setLayout(completeContainer);
-
-    BaseModule::mainWindow = test;
+    BaseModule::mainWindow = mainWidget;
     codeGen = new CodeGen(m_blockarea, options);
     connect(m_modList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(makeBlock(QListWidgetItem*)));
     connect(runButton, SIGNAL(released()), codeGen, SLOT(runCode()));
