@@ -177,14 +177,32 @@ void BlockArea::dragEnterEvent(QDragEnterEvent *event)
       event->acceptProposedAction();
       QScrollArea::dragEnterEvent(event);
 }
+
+//Given the y coordinate of the mouse, figures out which row you should insert the block to
+int BlockArea::mouseCoordToModuleLocation(int yCoord) {
+    int moduleLocation = 0;
+    std::unordered_map<int, int>* rowToCol = createRowToCol();
+    while(yCoord > 0 && moduleLocation < m_layout->count()) {
+        yCoord -= m_layout->itemAtPosition(moduleLocation, getCol(rowToCol, moduleLocation))->widget()->height() + m_layout->verticalSpacing();
+        moduleLocation++;
+    }
+    delete rowToCol;
+    return moduleLocation;
+}
+
 //Adds in indicator for where the drag and drop block will go.
 void BlockArea::dragMoveEvent(QDragMoveEvent *event)
 {
     if(m_layout->count() > 0 && line != nullptr)
     {
         int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
-        int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
-        int end_module_pix = module_location * (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+        int module_location = mouseCoordToModuleLocation(y_coord);
+        int end_module_pix = 0;
+        std::unordered_map<int, int>* rowToCol = createRowToCol();
+        for(int i=0; i<module_location; i++) {
+            end_module_pix += m_layout->itemAtPosition(i, getCol(rowToCol, i))->widget()->height() + m_layout->verticalSpacing();
+        }
+        delete rowToCol;
         if(module_location != cur_line_location)
         {
             if(module_location > m_layout->count())
@@ -213,6 +231,7 @@ void BlockArea::dropEvent(QDropEvent *event)
 {
     const QMimeData* itemData = event->mimeData();
     int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
+    int drop_location = mouseCoordToModuleLocation(y_coord);
     int index = itemData->property("index").toInt();
     if(index == FROM_MOD_LIST)
     {
@@ -223,21 +242,19 @@ void BlockArea::dropEvent(QDropEvent *event)
             event->acceptProposedAction();
             return;
         }
-        int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
 
-        if(module_location > m_layout->count())
+        if(drop_location > m_layout->count())
         {
             createBlock(blockType);
         }
         else
         {
-            createBlockAt(blockType, module_location);
+            createBlockAt(blockType, drop_location);
         }
         event->acceptProposedAction();
     }
     else
     {
-        int drop_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
         std::unordered_map<int, int> *rowToCol = createRowToCol();
         if(drop_location > index)
         {

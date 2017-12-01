@@ -40,6 +40,7 @@ private slots:
     void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
 private:
     QGridLayout* m_layout;
+    int mouseCoordToModuleLocation(int yCoord);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
