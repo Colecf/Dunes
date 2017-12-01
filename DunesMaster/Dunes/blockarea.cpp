@@ -283,13 +283,3 @@ int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
     return found->second;
 }
 
-int BlockArea::getLastRow() {
-    int row, col, rowSpan, colSpan;
-    int largest = 0;
-    for(int idx = 0; idx < m_layout->count(); idx++){
-        m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
-        if(row > largest)
-            largest = row;
-    }
-    return largest;
-}
