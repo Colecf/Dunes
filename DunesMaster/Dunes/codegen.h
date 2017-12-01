@@ -19,7 +19,8 @@ private slots:
     void runCode();
     void finishedNodeProcess(int status);
     void finishedNpmProcess(int status);
-    void finishProcessError(QProcess::ProcessError error);
+    void finishNodeProcessError(QProcess::ProcessError error);
+    void finishNpmProcessError(QProcess::ProcessError error);
 private:
     QString generateCode();
     bool checkNodeAndNpmPaths();
