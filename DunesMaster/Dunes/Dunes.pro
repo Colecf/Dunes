@@ -46,7 +46,9 @@ SOURCES += \
     modules/constantmodule.cpp \
     optionsmenu.cpp \
     existingfiledialog.cpp \
-    saveload.cpp
+    saveload.cpp \
+    modules/setvariablemodule.cpp \
+    modules/getvariablemodule.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -70,7 +72,9 @@ HEADERS += \
     modules/constantmodule.h \
     optionsmenu.h \
     existingfiledialog.h \
-    saveload.h
+    saveload.h \
+    modules/setvariablemodule.h \
+    modules/getvariablemodule.h
 
 FORMS +=
 

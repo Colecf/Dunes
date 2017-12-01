@@ -28,6 +28,8 @@ enum ModuleType {
     ModuleIf,
     ModuleWhile,
     ModuleConstant,
+    ModuleSetVariable,
+    ModuleGetVariable
 };
 
 class BaseModule;

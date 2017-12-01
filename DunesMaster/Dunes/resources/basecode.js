@@ -2,6 +2,7 @@ var cheerio=require('cheerio');
 var request=require('sync-request');
 var fs=require('fs');
 var stack=[];
+var variables = {};
 function top() {
     return stack[stack.length-1];
 }
@@ -18,6 +19,18 @@ function get_page(url) {
     }
     stack.push(request('GET',url).getBody())
 }
+function load_variable(name) {
+    if(stack.length>0)
+    {
+        pop()
+    }
+    if(name in variables) {
+        stack.push(variables[name]);
+    } else {
+        stack.push("");
+    }
+}
+
 function children(query,css){
     var $=query;
     var html="";
