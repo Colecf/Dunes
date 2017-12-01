@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QProcess>
 #include <QMessageBox>
+#include <QDir>
 #include "optionsmenu.h"
 #include "blockarea.h"
 
@@ -25,6 +26,8 @@ private:
     QString generateCode();
     bool checkNodeAndNpmPaths();
     void startProcess(QString codePath, QString packageJsonPath);
+    void setUpProcess(QString packageJsonPath, QString npmPath, QString nodePath);
+    void setOutFiles(QDir curDir, QString folderPath, bool isNode);
     QString writePackageJson(QString codePath);
     QProcess *nodeProcess;
     QProcess *npmProcess;

@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QSaveFile>
 #include <QTextStream>
-#include <QDir>
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QDialog>
@@ -102,6 +101,7 @@ QString CodeGen::generateCode(){
             }
         }
     }
+    delete parentRowStack;
     return code;
 }
 
@@ -112,6 +112,9 @@ void CodeGen::writeCode(){
     }
     QString code = INITIAL_CODE;
     QString pathToCode = QFileDialog::getSaveFileName(m_blockarea, tr("Save generated code to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),  tr("Javascript (*.js)"));
+    if(pathToCode.length() == 0){
+        return;
+    }
     QDir *codeDir = new QDir(pathToCode);
     if(codeDir->cdUp()){
         writePackageJson(codeDir->absolutePath());
@@ -119,6 +122,7 @@ void CodeGen::writeCode(){
     else{
         qInfo() << "cdUp on codeDir failed!";
     }
+    delete codeDir;
     QString pathToCSV = QFileDialog::getSaveFileName(m_blockarea, tr("Save CSV to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("CSV (*.csv)"));
     code += "const output_script = '" + pathToCSV + "';if(fs.existsSync(output_script)){fs.truncateSync(output_script, 0);}\n" + generateCode();
     QSaveFile qSaveFile(pathToCode);
@@ -130,7 +134,7 @@ void CodeGen::writeCode(){
 }
 
 bool CodeGen::checkNodeAndNpmPaths(){
-    return (options->getNodePath().length() != 0 || options->getNpmPath().length() != 0);
+    return (options->getNodePath().length() != 0 && options->getNpmPath().length() != 0);
 }
 
 //runCode for the runButton
@@ -148,6 +152,9 @@ void CodeGen::runCode(){
     QString pathToCode = curDir.absolutePath() + "/output/" + "dunes_index.js";
     QString packagePath = writePackageJson(curDir.absolutePath() + "/output/");
     QString pathToCSV = QFileDialog::getSaveFileName(m_blockarea, tr("Save CSV to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("CSV (*.csv)"));
+    if(pathToCSV.length() == 0){
+        return;
+    }
     code += "const output_script = '" + pathToCSV + "';if(fs.existsSync(output_script)){fs.truncateSync(output_script, 0);}\n" + generateCode();
     QSaveFile qSaveFile(pathToCode);
     if(curDir.mkpath(curDir.absolutePath() + "/output")){
@@ -172,46 +179,59 @@ QString CodeGen::writePackageJson(QString codePath){
             QTextStream stream(&qSaveFile);
             stream << packageJson;
             qSaveFile.commit();
+            delete dir;
             return packageJsonPath;
         }
     }
+    delete dir;
     return "";
 }
 
-void CodeGen::startProcess(QString codePath, QString packageJsonPath){
-    // Add loading symbol?
-    QString npmFolderPath = QDir::current().absolutePath() + "/npm/";
-    QString nodeFolderPath = QDir::current().absolutePath() + "/node";
-    QDir curDir = QDir::current();
-    if(curDir.mkpath(npmFolderPath)){
-        npmProcess->setStandardOutputFile(npmFolderPath + "standardOutFile");
-        npmProcess->setStandardErrorFile(npmFolderPath + "standardErrFile");
+// isNode for nodeProcess, else npmProcess
+void CodeGen::setOutFiles(QDir curDir, QString folderPath, bool isNode){
+    if(curDir.mkpath(folderPath)){
+        if(isNode){
+            nodeProcess->setStandardErrorFile(folderPath + "standardErrFile");
+            nodeProcess->setStandardOutputFile(folderPath + "standardOutFile");
+        }
+        else{
+            npmProcess->setStandardErrorFile(folderPath + "standardErrFile");
+            npmProcess->setStandardOutputFile(folderPath + "standardOutFile");
+        }
     }
-    QString npmPath = options->getNpmPath();
-    QDir *packageJsonDir = new QDir(packageJsonPath);
-    packageJsonDir->cdUp();
-    npmProcess->setWorkingDirectory(packageJsonDir->absolutePath());
+}
+
+void CodeGen::setUpProcess(QString packageJsonPath, QString npmPath, QString nodePath){
+    QDir packageJsonDir =  QDir(packageJsonPath);
+    packageJsonDir.cdUp();
+    npmProcess->setWorkingDirectory(packageJsonDir.absolutePath());
     QProcessEnvironment sysenv = QProcessEnvironment::systemEnvironment();
     QDir npmDir = QDir(npmPath);
     npmDir.cdUp();
-    QString nodePath = options->getNodePath();
     QDir nodeDir = QDir(nodePath);
     nodeDir.cdUp();
     QString path = sysenv.value("PATH");
     if(path != "")
         path += ":";
     path += npmDir.absolutePath() + ":" + nodeDir.absolutePath();
-    qInfo() << "path is " << path;
     sysenv.remove("PATH");
     sysenv.insert("PATH", path);
     npmProcess->setProcessEnvironment(sysenv);
+}
+
+void CodeGen::startProcess(QString codePath, QString packageJsonPath){
+    QString npmFolderPath = QDir::current().absolutePath() + "/npm/";
+    QString nodeFolderPath = QDir::current().absolutePath() + "/node";
+    QDir curDir = QDir::current();
+    setOutFiles(curDir, npmFolderPath, false);
+    QString npmPath = options->getNpmPath();
+    QString nodePath = options->getNodePath();
+    setUpProcess(packageJsonPath, npmPath, nodePath);
     npmProcess->start(npmPath, QStringList() <<"install");
     qInfo() << "program is " << npmProcess->program();
-    if(curDir.mkpath(nodeFolderPath)){
-        nodeProcess->setStandardOutputFile(nodeFolderPath + "standardOutFile");
-        nodeProcess->setStandardErrorFile(nodeFolderPath + "standardErrFile");
-    }
-    nodeProcess->setProgram(nodePath + " " + codePath);
+    setOutFiles(curDir, nodeFolderPath, true);
+    nodeProcess->setProgram(nodePath);
+    nodeProcess->setArguments(QStringList() << codePath);
 }
 
 void CodeGen::finishNodeProcessError(QProcess::ProcessError error){
@@ -227,16 +247,14 @@ void CodeGen::finishNpmProcessError(QProcess::ProcessError error){
 }
 
 void CodeGen::finishedNpmProcess(int status){
+    qInfo() << "NPM finished with status: " << status;
     if(status == 0){
-        qInfo() << "NPM installed correctly";
-        qInfo() << "Node process: " << nodeProcess->program();
         nodeProcess->start();
     }
     else{
         alert->setText("NPM failed to finish");
         alert->exec();
     }
-    qInfo() << "NPM finished with status: " << status;
 }
 
 void CodeGen::finishedNodeProcess(int status){
