@@ -6,7 +6,6 @@
 #include <QMouseEvent>
 #include <QMimeData>
 #include <QApplication>
-#include "passdata.h"
 class ModuleList : public QListWidget
 {
     Q_OBJECT
