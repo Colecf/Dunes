@@ -3,7 +3,10 @@
 #include <limits>
 //Remove QDebug later
 #include <QDebug>
+
 #define FROM_MOD_LIST -1
+#define COL_WIDTH 250
+
 BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 {
     QWidget* widget = new QWidget;
@@ -25,18 +28,8 @@ bool BlockArea::createBlock(ModuleType blockType)
 {
     // whight: for now, this always creates blocks in the current nest
     BaseModule* module = BaseRegistry::createInstance(blockType);
+    module->setFixedWidth(COL_WIDTH);
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
-
-    // whight: other way of doing indentation, not grid, could also add
-    // horizontal layout with spacer to vertical layout?
-    //QWidget* indentedBlock = new QWidget();
-    //QHBoxLayout* layout = new QHBoxLayout;
-    //layout->setAlignment(Qt::AlignLeft);
-    //indentedBlock->setLayout(layout);
-    //layout->addSpacerItem(new QSpacerItem(50, 0));
-    //layout->addWidget(module);
-    //m_layout->addWidget(indentedBlock);
-
     m_layout->addWidget(module, m_layout->count(), 0, 1, 1);
     return true;
 }
@@ -108,6 +101,7 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
 {
     // whight: for now, this always creates blocks in the current nest
     BaseModule* module = BaseRegistry::createInstance(blockType);
+    module->setFixedWidth(COL_WIDTH);
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
     int desiredRowSpan = 1, desiredColSpan = 1;
     int col = 0;

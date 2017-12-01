@@ -8,7 +8,6 @@ BaseRegistry::map_type BaseRegistry::map;
 
 const QString BaseModule::title = "Base";
 const QString BaseModule::description = "Description";
-QWidget* BaseModule::mainWindow;
 
 BaseModule::BaseModule()
 {
@@ -18,9 +17,10 @@ BaseModule::BaseModule()
     m_layout->addWidget(m_titleLabel);
     setObjectName("BaseModule");
     setStyleSheet("#BaseModule { background-color: white; border: 3px solid grey; border-radius:20px; }");
-
     m_optionsPanel = new QWidget();
     m_optionsPanel->setObjectName("optionsPanel");
+    m_layout->setVerticalSpacing(0);
+    m_layout->addWidget(m_optionsPanel, 1, 0, 1, 1);
 
     setFocusPolicy(Qt::ClickFocus);
 }
@@ -44,14 +44,6 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         setStyleSheet("#BaseModule { background-color: white; border: 3px solid lightblue; border-radius:20px; }");
         setObjectName("BaseModuleSelected");
 
-
-        QWidget* toRemove = mainWindow->findChild<QWidget*>("optionsPanel");
-        if(toRemove) {
-            mainWindow->layout()->removeWidget(toRemove);
-            toRemove->setParent(nullptr);
-        }
-        mainWindow->layout()->itemAt(1)->layout()->addWidget(m_optionsPanel);
-        m_optionsPanel->setHidden(false);
         dragStartPosition = event->pos();
 
     }
