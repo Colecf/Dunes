@@ -122,7 +122,7 @@ void BlockArea::moveBlocksDown(int module_location)
     QWidget* prevWidget = nullptr;
     int mod_count = m_layout->count() - 1;
 
-    std::unordered_map<int, int> *rowToCol = createRowToCol();
+    auto rowToCol = createRowToCol();
 
     for(; module_location <= mod_count; module_location++)
     {
@@ -136,7 +136,7 @@ void BlockArea::moveBlocksDownUntil(int start, int end)
     int desiredRowSpan = 1, desiredColSpan = 1;
     QWidget* prevWidget = nullptr;
 
-    std::unordered_map<int, int> *rowToCol = createRowToCol();
+    auto rowToCol = createRowToCol();
     for(; start < end; start++)
     {
         prevWidget = m_layout->itemAtPosition(start, getCol(rowToCol, start))->widget();
@@ -156,7 +156,7 @@ void BlockArea::moveBlocksUp(int start, int end)
         return;
     int desiredRowSpan = 1, desiredColSpan = 1;
     QWidget* prevWidget = nullptr;
-    std::unordered_map<int, int> *rowToCol = createRowToCol();
+    auto rowToCol = createRowToCol();
     for(; start <= end; start++)
     {
         int col = getCol(rowToCol, start);
@@ -165,7 +165,6 @@ void BlockArea::moveBlocksUp(int start, int end)
         prevWidget = m_layout->itemAtPosition(start, col)->widget();
         m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
-    delete rowToCol;
 }
 QGridLayout* BlockArea::getLayout()
 {
@@ -181,12 +180,11 @@ void BlockArea::dragEnterEvent(QDragEnterEvent *event)
 //Given the y coordinate of the mouse, figures out which row you should insert the block to
 int BlockArea::mouseCoordToModuleLocation(int yCoord) {
     int moduleLocation = 0;
-    std::unordered_map<int, int>* rowToCol = createRowToCol();
+    auto rowToCol = createRowToCol();
     while(yCoord > 0 && moduleLocation < m_layout->count()) {
         yCoord -= m_layout->itemAtPosition(moduleLocation, getCol(rowToCol, moduleLocation))->widget()->height() + m_layout->verticalSpacing();
         moduleLocation++;
     }
-    delete rowToCol;
     return moduleLocation;
 }
 
@@ -198,11 +196,10 @@ void BlockArea::dragMoveEvent(QDragMoveEvent *event)
         int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
         int module_location = mouseCoordToModuleLocation(y_coord);
         int end_module_pix = 0;
-        std::unordered_map<int, int>* rowToCol = createRowToCol();
+        auto rowToCol = createRowToCol();
         for(int i=0; i<module_location; i++) {
             end_module_pix += m_layout->itemAtPosition(i, getCol(rowToCol, i))->widget()->height() + m_layout->verticalSpacing();
         }
-        delete rowToCol;
         if(module_location != cur_line_location)
         {
             if(module_location > m_layout->count())
@@ -255,7 +252,7 @@ void BlockArea::dropEvent(QDropEvent *event)
     }
     else
     {
-        std::unordered_map<int, int> *rowToCol = createRowToCol();
+        auto rowToCol = createRowToCol();
         if(drop_location > index)
         {
             if(drop_location >= m_layout->count())
@@ -277,19 +274,17 @@ void BlockArea::dropEvent(QDropEvent *event)
     line->setGeometry(0,0,0,0);
 }
 
-std::unordered_map<int, int>* BlockArea::createRowToCol(){
-     qInfo() << "new";
-    std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
+std::shared_ptr<std::unordered_map<int, int>> BlockArea::createRowToCol(){
+    std::shared_ptr<std::unordered_map<int, int>> rowToCol = std::make_shared<std::unordered_map<int, int>>();
     for(int idx = 0; idx < m_layout->count(); idx++){
         int row, col, rowSpan, colSpan;
         m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
         rowToCol->insert({row, col});
-        qInfo() << row << col;
     }
     return rowToCol;
 }
 
-int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
+int BlockArea::getCol(std::shared_ptr<std::unordered_map<int, int>> dict, int row){
     auto found = dict->find(row);
     if(found == dict->end()){
         qErrnoWarning("Error: Could not find Block given key %d", row);

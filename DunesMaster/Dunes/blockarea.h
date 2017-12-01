@@ -34,8 +34,8 @@ public:
     void moveBlocksDownUntil(int start, int end);
     void moveBlocksUp(int start, int end);
     QGridLayout* getLayout();
-    std::unordered_map<int, int>* createRowToCol();
-    int getCol(const std::unordered_map<int, int> *dict, int row);
+    std::shared_ptr<std::unordered_map<int, int>> createRowToCol();
+    int getCol(std::shared_ptr<std::unordered_map<int, int>> dict, int row);
 private slots:
     void keyPressedInModule(BaseModule* mod, QKeyEvent* event);
 private:

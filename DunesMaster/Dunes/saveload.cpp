@@ -19,7 +19,7 @@ SaveLoad::SaveLoad(BlockArea *blockarea)
 QString SaveLoad::genSaveData()
 {
     QString saveData = "";
-    std::unordered_map<int, int> *rowToCol = m_blockarea->createRowToCol();
+    auto rowToCol = m_blockarea->createRowToCol();
     QGridLayout *m_layout = m_blockarea->getLayout();
     for(int row = 0; row < m_layout->count(); row++){
         int col;
