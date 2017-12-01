@@ -14,5 +14,5 @@ QString GetParentModule::getCode(){
 }
 
 QString GetParentModule::getConfig(QString col){
-    return title + col + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
