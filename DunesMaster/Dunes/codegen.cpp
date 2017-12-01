@@ -40,7 +40,7 @@ CodeGen::CodeGen(BlockArea *blockarea, OptionsMenu *optionsm)
 QString CodeGen::generateCode(){
     QString code = "";
     // Create mapping from row to column, do this instead of row to module because we can't get col from module
-    std::unordered_map<int, int> *rowToCol = m_blockarea->createRowToCol();
+    auto rowToCol = m_blockarea->createRowToCol();
     // Stack of every parent-block's row (while, if, scope, foreach). Get the block via casting a widget w/ itemAtPosition
     QGridLayout *m_layout = m_blockarea->getLayout();
     std::stack<int> *parentRowStack = new std::stack<int>;
