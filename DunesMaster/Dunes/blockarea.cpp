@@ -191,6 +191,7 @@ int BlockArea::mouseCoordToModuleLocation(int yCoord) {
 //Adds in indicator for where the drag and drop block will go.
 void BlockArea::dragMoveEvent(QDragMoveEvent *event)
 {
+    qInfo() << m_layout->verticalSpacing();
     if(m_layout->count() > 0 && line != nullptr)
     {
         int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();

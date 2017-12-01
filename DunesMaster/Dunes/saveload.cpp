@@ -28,8 +28,8 @@ QString SaveLoad::genSaveData()
             return NULL;
         }
         QWidget* const item = m_layout->itemAtPosition(row, col)->widget();
-        if(BaseModule *module = dynamic_cast<BaseModule*>(item)){
-            saveData += module->title;
+        if(BaseModule *module = dynamic_cast<BaseModule*>(item)) {
+            saveData += module->getConfig(QString::number(col));
         }
     }
     return saveData;

@@ -51,5 +51,5 @@ QString IfModule::getCode(){
 }
 
 QString IfModule::getConfig(QString col){
-    return title + col + "inputTypeDropDown=" + inputTypeDropDown->currentIndex() + "Operand=" + operand->text() + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "inputTypeDropDown=" + QString::number(inputTypeDropDown->currentIndex()) + ";Operand=" + operand->text() + "\n";
 }
