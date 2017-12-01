@@ -31,21 +31,9 @@ BaseModule::~BaseModule() {
 
 void BaseModule::mousePressEvent(QMouseEvent* event)
 {
-    //TODO change to using slots and signals to avoid global mainWindow
     if(event->button() == Qt::LeftButton)
     {
-
-        BaseModule* selected = parent()->findChild<BaseModule*>("BaseModuleSelected");
-        if(selected)
-        {
-            selected->setObjectName("BaseModule");
-            selected->setStyleSheet("#BaseModule { background-color: white; border: 3px solid grey; border-radius:20px; }");
-        }
-        setStyleSheet("#BaseModule { background-color: white; border: 3px solid lightblue; border-radius:20px; }");
-        setObjectName("BaseModuleSelected");
-
         dragStartPosition = event->pos();
-
     }
 }
 
@@ -81,6 +69,17 @@ void BaseModule::mouseMoveEvent(QMouseEvent *event)
     drag->setMimeData(mimeData);
     drag->exec(Qt::MoveAction);
 }
+
+void BaseModule::focusInEvent(QFocusEvent*) {
+    setStyleSheet("#BaseModule { background-color: white; border: 3px solid lightblue; border-radius:20px; }");
+    setObjectName("BaseModuleSelected");
+}
+
+void BaseModule::focusOutEvent(QFocusEvent*) {
+    setObjectName("BaseModule");
+    setStyleSheet("#BaseModule { background-color: white; border: 3px solid grey; border-radius:20px; }");
+}
+
 void BaseModule::keyPressEvent(QKeyEvent *e)
 {
     emit keyPressed(this, e);

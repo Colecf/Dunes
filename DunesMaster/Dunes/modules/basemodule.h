@@ -28,6 +28,8 @@ enum ModuleType {
     ModuleIf,
     ModuleWhile,
     ModuleConstant,
+    ModuleSetVariable,
+    ModuleGetVariable
 };
 
 class BaseModule;
@@ -62,6 +64,8 @@ public:
 
     virtual void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
     //void dropEvent(QDropEvent *event);
      virtual QString getCode() = 0;
 
