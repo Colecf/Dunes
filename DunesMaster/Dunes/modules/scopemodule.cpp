@@ -21,5 +21,5 @@ QString ScopeModule::getCode(){
 }
 
 QString ScopeModule::getConfig(QString col){
-    return title + col + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }

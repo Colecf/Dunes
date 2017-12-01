@@ -1,4 +1,5 @@
 #include "modulelist.h"
+#include "modulelistitem.h"
 
 ModuleList::ModuleList(QWidget *parent) : QListWidget(parent)
 {
@@ -22,13 +23,12 @@ void ModuleList::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-        QDrag *drag = new QDrag(this);
-        PassData *mimeData = new PassData;
+    QDrag *drag = new QDrag(this);
 
-        mimeData->setText(currentItem()->text());
-        mimeData->setQListWidgetItem(this);
-        mimeData->setIndex(-1);
-        drag->setMimeData(mimeData);
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setProperty("index", -1);
+    mimeData->setProperty("blocktype", ((ModuleListItem*)currentItem())->getType());
+    drag->setMimeData(mimeData);
 
-        drag->exec(Qt::CopyAction);
+    drag->exec(Qt::CopyAction);
 }
