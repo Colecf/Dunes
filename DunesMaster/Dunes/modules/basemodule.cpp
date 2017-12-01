@@ -60,7 +60,7 @@ void BaseModule::mouseMoveEvent(QMouseEvent *event)
         return;
     }
     QDrag *drag = new QDrag(this);
-    PassData *mimeData = new PassData;
+    QMimeData *mimeData = new QMimeData;
     QGridLayout *blockArea = (QGridLayout *)parentWidget()->layout();
     std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
     for(int idx = 0; idx < blockArea->count(); idx++){
@@ -74,7 +74,7 @@ void BaseModule::mouseMoveEvent(QMouseEvent *event)
     {
         if(blockArea->itemAtPosition(p.first, p.second)->widget() == this)
         {
-            mimeData->setIndex(p.first);
+            mimeData->setProperty("index", p.first);
         }
     }
     delete rowToCol;

@@ -213,12 +213,13 @@ void BlockArea::dropEvent(QDropEvent *event)
 {
     const QMimeData* itemData = event->mimeData();
     int y_coord = m_layout->parentWidget()->mapFrom(this, event->pos()).y();
-    if(((PassData*)itemData)->getIndex() == FROM_MOD_LIST)
+    int index = itemData->property("index").toInt();
+    if(index == FROM_MOD_LIST)
     {
-        QListWidgetItem *block = ((PassData*)itemData)->getQListWidgetItem();
+        ModuleType blockType = static_cast<ModuleType>(itemData->property("blocktype").toInt());
         if(m_layout->count() == 0)
         {
-            createBlock((((ModuleListItem*)block)->getType()));
+            createBlock(blockType);
             event->acceptProposedAction();
             return;
         }
@@ -226,23 +227,22 @@ void BlockArea::dropEvent(QDropEvent *event)
 
         if(module_location > m_layout->count())
         {
-            createBlock((((ModuleListItem*)block)->getType()));
+            createBlock(blockType);
         }
         else
         {
-            createBlockAt((((ModuleListItem*)block)->getType()), module_location);
+            createBlockAt(blockType, module_location);
         }
         event->acceptProposedAction();
     }
     else
     {
-        int index = ((PassData*)itemData)->getIndex();
         int drop_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
+        std::unordered_map<int, int> *rowToCol = createRowToCol();
         if(drop_location > index)
         {
             if(drop_location >= m_layout->count())
                 drop_location = m_layout->count();
-            std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *draggedBlock = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
             m_layout->removeWidget(draggedBlock);
             moveBlocksUp(index + 1, drop_location);
@@ -250,9 +250,7 @@ void BlockArea::dropEvent(QDropEvent *event)
         }
         else if(index > drop_location)
         {
-            std::unordered_map<int, int> *rowToCol = createRowToCol();
-            QWidget *block = nullptr;
-            block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
+            QWidget *block = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
             moveBlocksDownUntil(drop_location, index);
             m_layout->addWidget(block, drop_location, 0, 1, 1);
         }
@@ -282,4 +280,3 @@ int BlockArea::getCol(const std::unordered_map<int, int> *dict, int row){
     }
     return found->second;
 }
-

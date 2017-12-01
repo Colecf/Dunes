@@ -29,7 +29,6 @@ SOURCES += \
         modulelistitem.cpp \
     blockarea.cpp \
     modulelist.cpp \
-    passdata.cpp \
     modules/scopemodule.cpp \
     modules/basemodule.cpp \
     modules/downloadmodule.cpp \
@@ -54,7 +53,6 @@ HEADERS += \
     modulelistitem.h \
     blockarea.h \
     modulelist.h \
-    passdata.h \
     modules/scopemodule.h \
     modules/basemodule.h \
     modules/downloadmodule.h \
