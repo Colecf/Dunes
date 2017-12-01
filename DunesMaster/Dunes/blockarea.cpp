@@ -115,7 +115,7 @@ bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
     return true;
 }
 
-//need to move blocks up
+//Moves all blocks down 1 space starting from module location
 void BlockArea::moveBlocksDown(int module_location)
 {
     int desiredRowSpan = 1, desiredColSpan = 1;
@@ -130,7 +130,7 @@ void BlockArea::moveBlocksDown(int module_location)
         m_layout->addWidget(prevWidget, module_location + 1, getCol(rowToCol, module_location), desiredRowSpan, desiredColSpan);
     }
 }
-
+//Moves all blocks down 1 space starting at start and stops before end
 void BlockArea::moveBlocksDownUntil(int start, int end)
 {
     int desiredRowSpan = 1, desiredColSpan = 1;
@@ -143,17 +143,19 @@ void BlockArea::moveBlocksDownUntil(int start, int end)
         m_layout->addWidget(prevWidget, start + 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
 }
-
+/* Moves blocks upwards in the layout by 1 space starting at start
+ * and ending at end. */
 void BlockArea::moveBlocksUp(int start, int end)
 {
-    int lastRow = getLastRow();
+    int lastRow = m_layout->count();
     if(end > lastRow || end < 0)
         end = lastRow;
+    else
+        end--;
     if(start < 0)
         return;
     int desiredRowSpan = 1, desiredColSpan = 1;
     QWidget* prevWidget = nullptr;
-    start++;
     std::unordered_map<int, int> *rowToCol = createRowToCol();
     for(; start <= end; start++)
     {
@@ -169,13 +171,13 @@ QGridLayout* BlockArea::getLayout()
 {
     return m_layout;
 }
-
+//Necessary for dragMoveEvent and drop event
 void BlockArea::dragEnterEvent(QDragEnterEvent *event)
 {
       event->acceptProposedAction();
       QScrollArea::dragEnterEvent(event);
 }
-
+//Adds in indicator for where the drag and drop block will go.
 void BlockArea::dragMoveEvent(QDragMoveEvent *event)
 {
     if(m_layout->count() > 0 && line != nullptr)
@@ -206,7 +208,7 @@ void BlockArea::dragMoveEvent(QDragMoveEvent *event)
         line = new QFrame(m_layout->parentWidget());
     }
 }
-
+//Takes the dropped block and inserts into the right spot based on mouse position. Also removes indicator afterwards.
 void BlockArea::dropEvent(QDropEvent *event)
 {
     const QMimeData* itemData = event->mimeData();
@@ -221,7 +223,6 @@ void BlockArea::dropEvent(QDropEvent *event)
             return;
         }
         int module_location = y_coord / (m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
-        //qInfo() << module_location << event->pos().y() <<(m_layout->itemAt(0)->widget()->height() + m_layout->verticalSpacing());
 
         if(module_location > m_layout->count())
         {
@@ -240,12 +241,12 @@ void BlockArea::dropEvent(QDropEvent *event)
         if(drop_location > index)
         {
             if(drop_location >= m_layout->count())
-                drop_location = m_layout->count()-1;
+                drop_location = m_layout->count();
             std::unordered_map<int, int> *rowToCol = createRowToCol();
             QWidget *draggedBlock = m_layout->itemAtPosition(index, getCol(rowToCol, index))->widget();
             m_layout->removeWidget(draggedBlock);
-            moveBlocksUp(index, drop_location);
-            m_layout->addWidget(draggedBlock, drop_location, 0, 1, 1);
+            moveBlocksUp(index + 1, drop_location);
+            m_layout->addWidget(draggedBlock, drop_location - 1, 0, 1, 1);
         }
         else if(index > drop_location)
         {
@@ -258,15 +259,17 @@ void BlockArea::dropEvent(QDropEvent *event)
         event->acceptProposedAction();
     }
     QScrollArea::dropEvent(event);
-
+    line->setGeometry(0,0,0,0);
 }
 
 std::unordered_map<int, int>* BlockArea::createRowToCol(){
+     qInfo() << "new";
     std::unordered_map<int, int> *rowToCol = new std::unordered_map<int, int>();
     for(int idx = 0; idx < m_layout->count(); idx++){
         int row, col, rowSpan, colSpan;
         m_layout->getItemPosition(idx, &row, &col, &rowSpan, &colSpan);
         rowToCol->insert({row, col});
+        qInfo() << row << col;
     }
     return rowToCol;
 }
