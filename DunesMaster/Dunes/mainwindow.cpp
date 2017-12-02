@@ -99,8 +99,8 @@ void MainWindow::createTopLayout(){
     runButton = new QPushButton("Run Code");
     generateButton = new QPushButton("Generate");
     optionsButton = new QPushButton("Options");
-    saveButton = new QPushButton("Save..");
-    loadButton = new QPushButton("Load..");
+    saveButton = new QPushButton("Save");
+    loadButton = new QPushButton("Load");
     top_layout->addWidget(runButton);
     top_layout->addWidget(generateButton);
     top_layout->addWidget(optionsButton);
