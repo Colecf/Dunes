@@ -7,7 +7,6 @@
 #include "modules/nextmodule.h"
 #include "modules/addrowmodule.h"
 #include "modules/addcolumnmodule.h"
-#include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
 #include "modules/ifmodule.h"
@@ -31,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseModule::setUp<NextModule>(m_modList);
     BaseModule::setUp<AddRowModule>(m_modList);
     BaseModule::setUp<AddColumnModule>(m_modList);
-    BaseModule::setUp<GetParentModule>(m_modList);
     BaseModule::setUp<ForEachModule>(m_modList);
     BaseModule::setUp<GetAttributeModule>(m_modList);
     BaseModule::setUp<IfModule>(m_modList);
