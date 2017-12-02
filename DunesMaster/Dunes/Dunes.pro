@@ -37,7 +37,6 @@ SOURCES += \
     modules/nextmodule.cpp \
     modules/addrowmodule.cpp \
     modules/addcolumnmodule.cpp \
-    modules/getparentmodule.cpp \
     modules/foreachmodule.cpp \
     modules/getattributemodule.cpp \
     codegen.cpp \
@@ -63,7 +62,6 @@ HEADERS += \
     modules/nextmodule.h \
     modules/addrowmodule.h \
     modules/addcolumnmodule.h \
-    modules/getparentmodule.h \
     modules/foreachmodule.h \
     modules/getattributemodule.h \
     codegen.h \

@@ -17,7 +17,6 @@
 #include "modules/nextmodule.h"
 #include "modules/addrowmodule.h"
 #include "modules/addcolumnmodule.h"
-#include "modules/getparentmodule.h"
 #include "modules/foreachmodule.h"
 #include "modules/getattributemodule.h"
 #include "modules/ifmodule.h"
