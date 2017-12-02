@@ -67,9 +67,10 @@ public:
     void focusInEvent(QFocusEvent*) override;
     void focusOutEvent(QFocusEvent*) override;
     //void dropEvent(QDropEvent *event);
-     virtual QString getCode() = 0;
+    virtual QString getCode() = 0;
 
-     virtual QString getConfig(QString col) = 0;
+    virtual QString getConfig(QString col) = 0;
+    //virtual QString setConfig(QString col) = 0;
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
     // a circular header inclusion I implmented createModuleListItem in the cpp

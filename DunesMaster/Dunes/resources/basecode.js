@@ -57,7 +57,7 @@ function get_text(){
 function add_row(){
     var data=fs.readFileSync(output_script);
     fs.truncateSync(output_script,data.length-1);
-    fs.appendFileSync(output_script,'\\n');
+    fs.appendFileSync(output_script,'\n');
 }
 function add_column(data){
     fs.appendFileSync(output_script,'"'+data.replace(/\"/g,'""')+'",');

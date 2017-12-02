@@ -80,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     saveLoad = new SaveLoad(m_blockarea);
     connect(saveButton, SIGNAL(released()), saveLoad, SLOT(save()));
+    connect(loadButton, SIGNAL(released()), saveLoad, SLOT(load()));
 }
 
 void MainWindow::updateDesc()

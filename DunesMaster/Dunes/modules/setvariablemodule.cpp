@@ -31,5 +31,5 @@ QString SetVariableModule::getCode(){
 }
 
 QString SetVariableModule::getConfig(QString col){
-    return "type=" + QString::number(type) + ";" + "col=" + col + ";name="+varNameBox->text()+"\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";name="+varNameBox->text() + ";\n";
 }
