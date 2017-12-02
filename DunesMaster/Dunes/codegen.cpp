@@ -10,8 +10,8 @@
 #include "codegen.h"
 #include "blockarea.h"
 
-QString loadInitialCode() {
-    QFile f(":/resources/basecode.js");
+QString readFile(QString filename) {
+    QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
         qInfo() << "Couldn't open file!";
         return "";
@@ -108,7 +108,7 @@ QString CodeGen::generateCode(){
 // writeCode for the generateButton
 void CodeGen::writeCode(){
     if(INITIAL_CODE.size() == 0) {
-        INITIAL_CODE = loadInitialCode();
+        INITIAL_CODE = readFile(":/resources/basecode.js");
     }
     QString code = INITIAL_CODE;
     QString pathToCode = QFileDialog::getSaveFileName(m_blockarea, tr("Save generated code to"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),  tr("Javascript (*.js)"));
@@ -145,7 +145,7 @@ void CodeGen::runCode(){
         return;
     }
     if(INITIAL_CODE.size() == 0) {
-        INITIAL_CODE = loadInitialCode();
+        INITIAL_CODE = readFile(":/resources/basecode.js");
     }
     QString code = INITIAL_CODE;
     QDir curDir = QDir::current();
@@ -221,15 +221,14 @@ void CodeGen::setUpProcess(QString packageJsonPath, QString npmPath, QString nod
 
 void CodeGen::startProcess(QString codePath, QString packageJsonPath){
     QString npmFolderPath = QDir::current().absolutePath() + "/npm/";
-    QString nodeFolderPath = QDir::current().absolutePath() + "/node";
+    QString nodeFolderPath = QDir::current().absolutePath() + "/node/";
     QDir curDir = QDir::current();
     setOutFiles(curDir, npmFolderPath, false);
+    setOutFiles(curDir, nodeFolderPath, true);
     QString npmPath = options->getNpmPath();
     QString nodePath = options->getNodePath();
     setUpProcess(packageJsonPath, npmPath, nodePath);
     npmProcess->start(npmPath, QStringList() <<"install");
-    qInfo() << "program is " << npmProcess->program();
-    setOutFiles(curDir, nodeFolderPath, true);
     nodeProcess->setProgram(nodePath);
     nodeProcess->setArguments(QStringList() << codePath);
 }
@@ -258,7 +257,13 @@ void CodeGen::finishedNpmProcess(int status){
 }
 
 void CodeGen::finishedNodeProcess(int status){
-    alert->setText("Script ran!");
-    alert->exec();
+    if(status == 0){
+        alert->setText("Script ran!");
+        alert->exec();
+    }
+    else{
+        alert->setText(readFile(QDir::current().absolutePath() + "/node/standardErrFile"));
+        alert->exec();
+    }
     qInfo() << "Node finished with status: " << status;
 }
