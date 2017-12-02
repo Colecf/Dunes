@@ -34,6 +34,7 @@ public:
     void moveBlocksDown(int module_location);
     void moveBlocksDownUntil(int start, int end);
     void moveBlocksUp(int start, int end);
+    void unIndentBlocks(int start);
     QGridLayout* getLayout();
     std::shared_ptr<std::unordered_map<int, int>> createRowToCol();
     int getCol(std::shared_ptr<std::unordered_map<int, int>> dict, int row);
@@ -43,11 +44,11 @@ private:
     QGridLayout* m_layout;
     int mouseCoordToModuleLocation(int yCoord);
     void dragEnterEvent(QDragEnterEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     int cur_line_location = -1;
     QFrame *line = nullptr;
-    //void paintEvent(QPaintEvent *event);
 
 };
 
