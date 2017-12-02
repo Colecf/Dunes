@@ -80,7 +80,7 @@ public:
     const static ModuleType type = ModuleError;
     const static QString title;
     const static QString description;
-    std::vector<BaseModule*> *children;
+    std::vector<BaseModule*> children;
 
     // Disables switching focus when hitting tab when the focus is on a module
     bool focusNextPrevChild(bool) override { return false; }

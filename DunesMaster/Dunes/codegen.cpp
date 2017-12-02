@@ -74,17 +74,13 @@ QString CodeGen::generateCode(){
                 if(parentCol+1 == col){
                     QWidget* const parent = m_layout->itemAtPosition(parentRowStack->top(), parentCol)->widget();
                     if(BaseModule *parentModule = dynamic_cast<BaseModule*>(parent)){
-                        parentModule->children->push_back(module);
+                        parentModule->children.push_back(module);
                     }
                 }
             }
-            // If it's a scope, push on the row of the block
-            if(dynamic_cast<ScopeModule*>(module)){
+            // If it's a module that can be a parent, push on the row of the block
+            if(dynamic_cast<ScopeModule*>(module) || dynamic_cast<IfModule*>(module) || dynamic_cast<WhileModule*>(module) || dynamic_cast<ForEachModule*>(module)) {
                 parentRowStack->push(row);
-                module->children = new std::vector<BaseModule*>;
-            }
-            else if(dynamic_cast<IfModule*>(module) || dynamic_cast<WhileModule*>(module)){
-                module->children = new std::vector<BaseModule*>;
             }
         }
     }
