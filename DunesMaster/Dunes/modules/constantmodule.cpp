@@ -25,7 +25,7 @@ QString ConstantModule::getCode(){
     if(SelectBox->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    return "constant('"+SelectBox->text()+"');\n";
+    return "constant(\""+escapeString(SelectBox->text())+"\");\n";
 }
 
 QString ConstantModule::getConfig(QString col){

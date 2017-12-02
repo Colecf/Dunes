@@ -39,8 +39,13 @@ QString WhileModule::getCode(){
     if(operand->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    QString code = "while(top() " + inputTypeDropDown->currentText() + " '" + operand->text() + "'){\n";
-    if((BaseModule*)this->children != NULL){
+    QString code;
+    if(inputTypeDropDown->currentIndex() == CONTAINSINDEX) {
+        code = "while(top().indexOf(\""+escapeString(operand->text())+"\") != -1) {\n";
+    } else {
+        code = "while(top() " + inputTypeDropDown->currentText() + " '" + escapeString(operand->text()) + "') {\n";
+    }
+    if(this->children != NULL){
         for(size_t i = 0; i < this->children->size(); i++){
             code += "  " + this->children->at(i)->getCode();
         }
