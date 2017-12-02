@@ -16,3 +16,7 @@ QString AddRowModule::getCode(){
 QString AddRowModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool AddRowModule::setConfig(QString, QString) {
+    return true;
+}

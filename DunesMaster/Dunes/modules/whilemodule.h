@@ -10,6 +10,7 @@ public:
     WhileModule();
     QString getCode();
     QString getConfig(QString col);
+    bool setConfig(QString variable, QString value);
 
     const static ModuleType type = ModuleWhile;
 

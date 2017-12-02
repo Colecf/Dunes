@@ -32,3 +32,12 @@ QString SelectModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "CSS_Selector=" + SelectBox->text() + ";\n";
 }
 
+bool SelectModule::setConfig(QString variable, QString value) {
+    if (variable == "CSS_Selector") {
+        SelectBox->setText(value);
+        return true;
+    } else {
+        qInfo() << "Can't parse data: var: " << variable << "val: " << value << endl;
+        return false;
+    }
+}

@@ -31,3 +31,13 @@ QString GetAttributeModule::getCode(){
 QString GetAttributeModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "attribute=" + SelectBox->text() + ";\n";
 }
+
+bool GetAttributeModule::setConfig(QString variable, QString value) {
+    if (variable == "attribute") {
+        SelectBox->setText(value);
+        return true;
+    } else {
+        qInfo() << "Can't parse data: var: " << variable << "val: " << value << endl;
+        return false;
+    }
+}

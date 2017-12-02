@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QDebug>
 
 const QString ConstantModule::title = "Constant";
 const QString ConstantModule::description = "Replaces the input stream with a constant value.";
@@ -32,3 +33,11 @@ QString ConstantModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "value=" + SelectBox->text() + ";\n";
 }
 
+bool ConstantModule::setConfig(QString variable, QString value) {
+    if (variable == "value") {
+        SelectBox->setText(value);
+        return true;
+    }
+    qInfo() << "Can't parse data: var: " << variable << "val: " << value << endl;
+    return false;
+}

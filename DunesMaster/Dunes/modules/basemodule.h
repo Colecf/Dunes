@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QBoxLayout>
+#include <QDebug>
 #include "../modulelist.h"
 
 #define COMPILE_ERROR QString()
@@ -70,7 +71,8 @@ public:
     virtual QString getCode() = 0;
 
     virtual QString getConfig(QString col) = 0;
-    //virtual QString setConfig(QString col) = 0;
+    virtual bool setConfig(QString variable, QString value) = 0;
+
     // Sets up the module list item
     // templated static functions must be defined in the header, but to prevent
     // a circular header inclusion I implmented createModuleListItem in the cpp

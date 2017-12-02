@@ -33,3 +33,13 @@ QString SetVariableModule::getCode(){
 QString SetVariableModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";name="+varNameBox->text() + ";\n";
 }
+
+bool SetVariableModule::setConfig(QString variable, QString value) {
+    if (variable == "name") {
+        varNameBox->setText(value);
+        return true;
+    } else {
+        qInfo() << "Can't parse data: var: " << variable << "val: " << value << endl;
+        return false;
+    }
+}

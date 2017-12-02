@@ -16,3 +16,7 @@ QString AddColumnModule::getCode(){
 QString AddColumnModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool AddColumnModule::setConfig(QString, QString) {
+    return true;
+}
