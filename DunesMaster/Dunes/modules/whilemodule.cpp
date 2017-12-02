@@ -39,8 +39,6 @@ WhileModule::WhileModule()
     optionsLayout->addWidget(operand, 1, 1);
 
     m_optionsPanel->setLayout(optionsLayout);
-
-
 }
 
 QString WhileModule::getCode(){
@@ -51,12 +49,10 @@ QString WhileModule::getCode(){
     if(inputTypeDropDown->currentIndex() == CONTAINSINDEX) {
         code = "while(top().indexOf(\""+escapeString(operand->text())+"\") != -1) {\n";
     } else {
-        code = "while(top() " + inputTypeDropDown->currentText() + " '" + escapeString(operand->text()) + "') {\n";
+        code = "while(top() " + inputTypeDropDown->currentText() + " \"" + escapeString(operand->text()) + "\") {\n";
     }
-    if(this->children != NULL){
-        for(size_t i = 0; i < this->children->size(); i++){
-            code += "  " + this->children->at(i)->getCode();
-        }
+    for(size_t i = 0; i < children.size(); i++){
+        code += "  " + children.at(i)->getCode();
     }
     code += "}\n";
     return code;

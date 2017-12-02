@@ -25,7 +25,7 @@ QString SelectModule::getCode(){
     if(SelectBox->text().length() == 0) {
         return COMPILE_ERROR;
     }
-    return "select_by_css(top(),'"+SelectBox->text()+"');\n";
+    return "select_by_css(top(),\""+escapeString(SelectBox->text())+"\");\n";
 }
 
 QString SelectModule::getConfig(QString col){

@@ -40,8 +40,6 @@ IfModule::IfModule()
     optionsLayout->addWidget(operand, 1, 1);
 
     m_optionsPanel->setLayout(optionsLayout);
-
-
 }
 
 QString IfModule::getCode(){
@@ -54,10 +52,9 @@ QString IfModule::getCode(){
     } else {
         code = "if(top() " + inputTypeDropDown->currentText() + " '" + escapeString(operand->text()) + "') {\n";
     }
-    if(this->children != NULL){
-        for(size_t i = 0; i < this->children->size(); i++){
-            code += "  " + this->children->at(i)->getCode();
-        }
+
+    for(size_t i = 0; i < children.size(); i++){
+        code += "  " + children.at(i)->getCode();
     }
     code += "}\n";
     return code;
