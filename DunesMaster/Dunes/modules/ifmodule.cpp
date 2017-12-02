@@ -61,5 +61,5 @@ QString IfModule::getCode(){
 }
 
 QString IfModule::getConfig(QString col){
-    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "inputTypeDropDown=" + QString::number(inputTypeDropDown->currentIndex()) + ";Operand=" + operand->text() + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "comparisonType=" + QString::number(inputTypeDropDown->currentIndex()) + ";operand=" + operand->text() + ";\n";
 }

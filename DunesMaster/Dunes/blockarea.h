@@ -1,5 +1,6 @@
 #ifndef BLOCKAREA_H
 #define BLOCKAREA_H
+#include <memory>
 #include <QWidget>
 #include <QScrollArea>
 #include <QGridLayout>
@@ -28,6 +29,7 @@ class BlockArea : public QScrollArea
 public:
     explicit BlockArea(QWidget *parent = nullptr);
     bool createBlock(ModuleType);
+    BaseModule* createBlock(ModuleType, int);
     bool createBlockAt(ModuleType blockType, int module_location);
     void moveBlocksDown(int module_location);
     void moveBlocksDownUntil(int start, int end);

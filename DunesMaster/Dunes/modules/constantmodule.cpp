@@ -29,6 +29,6 @@ QString ConstantModule::getCode(){
 }
 
 QString ConstantModule::getConfig(QString col){
-    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "Value=" + SelectBox->text() + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "value=" + SelectBox->text() + ";\n";
 }
 

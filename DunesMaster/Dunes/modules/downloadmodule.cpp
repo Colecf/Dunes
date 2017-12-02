@@ -67,5 +67,5 @@ QString DownloadModule::getCode(){
 }
 
 QString DownloadModule::getConfig(QString col){
-    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "inputTypeDropDown=" + QString::number(inputTypeDropDown->currentIndex()) + ";url=" + urlBox->text() + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "inputType=" + QString::number(inputTypeDropDown->currentIndex()) + ";url=" + urlBox->text() + ";\n";
 }

@@ -34,6 +34,16 @@ bool BlockArea::createBlock(ModuleType blockType)
     return true;
 }
 
+// to create a block at a specific column and return the widget to set options on it later
+BaseModule* BlockArea::createBlock(ModuleType blockType, int col)
+{
+    BaseModule* module = BaseRegistry::createInstance(blockType);
+    module->setFixedWidth(COL_WIDTH);
+    connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+    m_layout->addWidget(module, m_layout->count(), col, 1, 1);
+    return module;
+}
+
 void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
 {
     if(event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab) {

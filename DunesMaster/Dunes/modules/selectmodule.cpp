@@ -29,6 +29,6 @@ QString SelectModule::getCode(){
 }
 
 QString SelectModule::getConfig(QString col){
-    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "CSS Selector=" + SelectBox->text() + "\n";
+    return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "CSS_Selector=" + SelectBox->text() + ";\n";
 }
 
