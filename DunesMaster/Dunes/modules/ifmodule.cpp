@@ -28,7 +28,7 @@ IfModule::IfModule()
     inputTypeDropDown->insertItem(LEINDEX, "<=");
     inputTypeDropDown->insertItem(GEINDEX, ">=");
     inputTypeDropDown->insertItem(CONTAINSINDEX, "Contains");
-    inputTypeDropDown->setCurrentIndex(0);
+    inputTypeDropDown->setCurrentIndex(EQINDEX);
     QLabel* inputTypeLabel2 = new QLabel("Operand:");
     QGridLayout* optionsLayout = new QGridLayout();
     optionsLayout->setAlignment(Qt::AlignTop);
