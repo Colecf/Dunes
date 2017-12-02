@@ -1,6 +1,6 @@
 #ifndef DOWNLOADMODULE_H
 #define DOWNLOADMODULE_H
-
+#include "../testcasespy.h"
 #include "basemodule.h"
 #include "QListWidget"
 #include <QComboBox>
@@ -10,7 +10,7 @@ class DownloadModule : public BaseModule
 {
     Q_OBJECT
 
-public:
+PUBLIC:
     DownloadModule();
     virtual ~DownloadModule();
     QString getCode();
@@ -21,10 +21,10 @@ public:
     const static QString title;
     const static QString description;
 
-private slots:
+PRIVATE slots:
     void inputTypeChanged(int);
 
-private:
+PRIVATE:
     QLineEdit* urlBox;
     QLabel* urlLabel;
     QComboBox* inputTypeDropDown;

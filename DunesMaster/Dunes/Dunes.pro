@@ -72,7 +72,8 @@ HEADERS += \
     existingfiledialog.h \
     saveload.h \
     modules/setvariablemodule.h \
-    modules/getvariablemodule.h
+    modules/getvariablemodule.h \
+    testcasespy.h
 
 FORMS +=
 
