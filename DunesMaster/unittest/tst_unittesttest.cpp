@@ -35,6 +35,16 @@ void UnittestTest::testDownloadModuleGetCodeAndGetConfig()
     mod->urlBox->setText("asdf");
     result = QString("get_page(\"asdf\");\n");
     QCOMPARE(mod->getCode(), result);
+
+    mod->inputTypeDropDown->setCurrentIndex(0);
+    mod->urlBox->setText("");
+    result = COMPILE_ERROR;
+    QCOMPARE(mod->getCode(), result);
+
+    mod->inputTypeDropDown->setCurrentIndex(2);
+    mod->urlBox->setText("");
+    result = COMPILE_ERROR;
+    QCOMPARE(mod->getCode(), result);
 }
 
 QTEST_MAIN(UnittestTest)
