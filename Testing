@@ -1,0 +1,15 @@
+We've tested the downloadmodule.cpp file in our unittest directory within our project. There were five equivalence classes tested. We compared the generated code with what was expected from it.
+
+1) Using the None option, setting text into the line edit. Expected result should be correctly generated code.
+2) Using the URL option. Expected result should be correctly generated code.
+3) Using the POST option, setting text into the line edit. Expected result should be correctly generated code.
+4) Using the None option, without setting text into the line edit. Expected result should be a macro we defined as COMPILE_ERROR.
+5) Using the POST option, without setting text into the line edit. Expected result should be a macro we defined as COMPILE_ERROR.
+
+Each of these test cases passed.
+
+Given more time, we could have set up tests for each of the modules we generated. Instead, we tested our GUI manually by looking at common actions users would take and comparing those results with the expected outcomes. We also didn't test generating code from blocks with nested children, which would require not simply unit testing some blocks, but also involving the blockarea.
+
+There are a lot more things we would need to test before any further deployment. At the very least, for the same equivalence classes as getCode() we could also get getConfig() and setConfig().
+
+Outside of the blocks, testing features like adding, indenting, deleting, and moving blocks would be necessary. We didn't really know how to test UI events in QT. We came across some resources documenting it, but we didn't have enough time to implement it.
