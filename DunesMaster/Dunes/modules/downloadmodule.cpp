@@ -69,3 +69,16 @@ QString DownloadModule::getCode(){
 QString DownloadModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "inputType=" + QString::number(inputTypeDropDown->currentIndex()) + ";url=" + urlBox->text() + ";\n";
 }
+
+bool DownloadModule::setConfig(QString variable, QString value) {
+    if (variable == "inputType") {
+        inputTypeDropDown->setCurrentIndex(value.toInt());
+        return true;
+    } else if (variable == "url") {
+        urlBox->setText(value);
+        return false;
+    } else {
+        qInfo() << "Can't parse data: var: " << variable << "val: " << value << endl;
+        return false;
+    }
+}

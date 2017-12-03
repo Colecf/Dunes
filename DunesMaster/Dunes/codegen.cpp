@@ -10,6 +10,7 @@
 #include "codegen.h"
 #include "blockarea.h"
 
+/* Opens a file, reads all it's contents and returns as string */
 QString readFile(QString filename) {
     QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
@@ -26,6 +27,8 @@ CodeGen::CodeGen()
 {
 }
 
+/* Set blockarea, options. Create nodeProcess, npmProcess, and an alert box.
+ Connects the processes to their respective functions on finishing, or an error occurring */
 CodeGen::CodeGen(BlockArea *blockarea, OptionsMenu *optionsm)
 {
     m_blockarea = blockarea;
@@ -40,6 +43,11 @@ CodeGen::CodeGen(BlockArea *blockarea, OptionsMenu *optionsm)
     connect(nodeProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(finishNodeProcessError(QProcess::ProcessError)));
 }
 
+
+/*
+    Runs after the Run Code or Generate buttons are pressed. Traverses blocks in block area
+    and calls each block's getCode() to form a QString with all the code
+*/
 QString CodeGen::generateCode(){
     QString code = "";
     // Create mapping from row to column, do this instead of row to module because we can't get col from module
@@ -101,7 +109,10 @@ QString CodeGen::generateCode(){
     return code;
 }
 
-// writeCode for the generateButton
+/*
+    Asks user for where to save generated code and the CSV created. Puts the packageJson in the same directory
+    as the generated code. Writes the generated code.
+*/
 void CodeGen::writeCode(){
     if(INITIAL_CODE.size() == 0) {
         INITIAL_CODE = readFile(":/resources/basecode.js");
@@ -129,11 +140,18 @@ void CodeGen::writeCode(){
     }
 }
 
+/*
+    Returns true only if both nodePath and npmPath are set.
+*/
 bool CodeGen::checkNodeAndNpmPaths(){
     return (options->getNodePath().length() != 0 && options->getNpmPath().length() != 0);
 }
 
-//runCode for the runButton
+/*
+    Runs after the Run Code button is pressed.
+    Asks for where to save CSV, writes package.json and generated code to hidden folder.
+    Then, starts startProcess()
+*/
 void CodeGen::runCode(){
     if(!checkNodeAndNpmPaths()){
         alert->setText("Please set your node and npm paths!");
@@ -165,6 +183,10 @@ void CodeGen::runCode(){
     }
 }
 
+/*
+    Called whenever we save our generated code. Writes a package.json for the user to manually run
+    'npm install' or for us to run 'npm install'
+*/
 QString CodeGen::writePackageJson(QString codePath){
     QString packageJsonPath = codePath + "package.json";
     QString packageJson = "{\n\t\"main\": \"index.js\",\n\t\"dependencies\": {\n\t\t\"cheerio\": \"^0.22.0\",\n\t\t\"request\": \"^2.83.0\",\n\t\t\"sync-request\": \"^4.1.0\"\n\t},\n\t\"devDependencies\": {},\n\t\"author\": [\n\t\t\"Derek Kwong\",\n\t\t\"Cole Faust\"\n\t]\n}";
@@ -183,7 +205,10 @@ QString CodeGen::writePackageJson(QString codePath){
     return "";
 }
 
-// isNode for nodeProcess, else npmProcess
+/*
+    Makes the path to the folder, if one isn't set. Then sets where the processes standardErrFile
+    and standardOutFiles go.
+*/
 void CodeGen::setOutFiles(QDir curDir, QString folderPath, bool isNode){
     if(curDir.mkpath(folderPath)){
         if(isNode){
@@ -197,6 +222,10 @@ void CodeGen::setOutFiles(QDir curDir, QString folderPath, bool isNode){
     }
 }
 
+/*
+    Called in startProcess() to set up environment variables, ensuring we have the correct
+    working directory and the correct PATH.
+*/
 void CodeGen::setUpProcess(QString packageJsonPath, QString npmPath, QString nodePath){
     QDir packageJsonDir =  QDir(packageJsonPath);
     packageJsonDir.cdUp();
@@ -215,6 +244,10 @@ void CodeGen::setUpProcess(QString packageJsonPath, QString npmPath, QString nod
     npmProcess->setProcessEnvironment(sysenv);
 }
 
+/*
+    Calls all necessary set up functions before starting the 'npm install' process.
+    Sets the nodeProcess's program.
+*/
 void CodeGen::startProcess(QString codePath, QString packageJsonPath){
     QString npmFolderPath = QDir::current().absolutePath() + "/npm/";
     QString nodeFolderPath = QDir::current().absolutePath() + "/node/";
@@ -229,18 +262,28 @@ void CodeGen::startProcess(QString codePath, QString packageJsonPath){
     nodeProcess->setArguments(QStringList() << codePath);
 }
 
+/*
+    Sends an alert message to the user if there's an error with the node process
+*/
 void CodeGen::finishNodeProcessError(QProcess::ProcessError error){
     alert->setText("Error Node: " + QString::number(error));
     alert->exec();
     qInfo() << "errored out: " << error;
 }
 
+/*
+    Sends an alert message to the user if there's an error with the npm process
+*/
 void CodeGen::finishNpmProcessError(QProcess::ProcessError error){
     alert->setText("Error Npm: " + QString::number(error ));
     alert->exec();
     qInfo() << "errored out: " << error;
 }
 
+/*
+    On finishing the npm process, we start the node process. Otherwise, we
+    alert the user that it failed.
+*/
 void CodeGen::finishedNpmProcess(int status){
     qInfo() << "NPM finished with status: " << status;
     if(status == 0){
@@ -252,6 +295,10 @@ void CodeGen::finishedNpmProcess(int status){
     }
 }
 
+/*
+    On finishing the node process with status 0, we alert the user that it finished successfully.
+    Otherwise, we alert the user with the error message that node left in it's standardErrFile.
+*/
 void CodeGen::finishedNodeProcess(int status){
     if(status == 0){
         alert->setText("Script ran!");

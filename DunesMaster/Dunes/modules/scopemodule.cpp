@@ -21,3 +21,7 @@ QString ScopeModule::getCode(){
 QString ScopeModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool ScopeModule::setConfig(QString, QString) {
+    return true;
+}

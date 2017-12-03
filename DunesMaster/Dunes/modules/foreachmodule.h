@@ -8,6 +8,7 @@ public:
     ForEachModule();
     QString getCode();
     QString getConfig(QString col);
+    bool setConfig(QString variable, QString value);
 
     const static ModuleType type = ModuleForEach;
 

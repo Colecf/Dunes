@@ -21,3 +21,7 @@ QString ForEachModule::getCode(){
 QString ForEachModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool ForEachModule::setConfig(QString, QString) {
+    return true;
+}

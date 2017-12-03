@@ -16,3 +16,7 @@ QString NextModule::getCode(){
 QString NextModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool NextModule::setConfig(QString, QString) {
+    return true;
+}

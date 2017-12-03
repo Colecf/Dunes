@@ -16,3 +16,7 @@ QString GetTextModule::getCode(){
 QString GetTextModule::getConfig(QString col){
     return "type=" + QString::number(type) + ";" + "col=" + col + ";" + "\n";
 }
+
+bool GetTextModule::setConfig(QString, QString) {
+    return true;
+}

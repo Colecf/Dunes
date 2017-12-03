@@ -73,20 +73,14 @@ void SaveLoad::load()
                 QRegularExpressionMatchIterator matchIter = re.globalMatch(data);
                 while(matchIter.hasNext()) {
                     QRegularExpressionMatch match = matchIter.next();
-                    for(int i = 0; i < match.capturedLength(); i++) {
-                        if(match.captured(i) == "type") {
-                            QRegularExpressionMatch colMatch = matchIter.next();
-                            module = m_blockarea->createBlock((ModuleType)match.captured(3).toInt(), colMatch.captured(3).toInt());
-                        } else {
-                            if (module != nullptr) {
-                                //module->setConfig(match.captured(i));
-                            }
+                    if(match.captured(2) == "type") {
+                        QRegularExpressionMatch colMatch = matchIter.next();
+                        module = m_blockarea->createBlock((ModuleType)match.captured(3).toInt(), colMatch.captured(3).toInt());
+                    } else {
+                        if (module != nullptr) {
+                            module->setConfig(match.captured(2), match.captured(3));
                         }
                     }
-                    qInfo() << match.captured(0) << endl;
-                    qInfo() << match.captured(1) << endl;
-                    qInfo() << match.captured(2) << endl;
-                    qInfo() << match.captured(3) << endl;
                 }
             }
             file.close();
