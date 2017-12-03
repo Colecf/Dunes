@@ -327,6 +327,9 @@ void BlockArea::dropEvent(QDropEvent *event)
     line->setGeometry(0,0,0,0);
 }
 
+/*
+    Creates a mapping of the row of each block to it's respective column. Returns the map
+*/
 std::shared_ptr<std::unordered_map<int, int>> BlockArea::createRowToCol(){
     std::shared_ptr<std::unordered_map<int, int>> rowToCol = std::make_shared<std::unordered_map<int, int>>();
     for(int idx = 0; idx < m_layout->count(); idx++){
@@ -337,6 +340,9 @@ std::shared_ptr<std::unordered_map<int, int>> BlockArea::createRowToCol(){
     return rowToCol;
 }
 
+/*
+    Gets the column given a row and the mapping.
+*/
 int BlockArea::getCol(std::shared_ptr<std::unordered_map<int, int>> dict, int row){
     auto found = dict->find(row);
     if(found == dict->end()){
