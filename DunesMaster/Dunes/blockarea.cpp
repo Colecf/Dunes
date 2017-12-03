@@ -26,7 +26,6 @@ BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 
 bool BlockArea::createBlock(ModuleType blockType)
 {
-    // whight: for now, this always creates blocks in the current nest
     BaseModule* module = BaseRegistry::createInstance(blockType);
     module->setFixedWidth(COL_WIDTH);
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
@@ -44,6 +43,25 @@ BaseModule* BlockArea::createBlock(ModuleType blockType, int col)
     return module;
 }
 
+bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
+{
+    BaseModule* module = BaseRegistry::createInstance(blockType);
+    module->setFixedWidth(COL_WIDTH);
+    connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+    int desiredRowSpan = 1, desiredColSpan = 1;
+    int col = 0;
+
+
+    if(m_layout->count() != 0)
+    {
+        moveBlocksDown(module_location);
+    }
+    m_layout->addWidget(module, module_location, col, desiredRowSpan, desiredColSpan);
+    return true;
+}
+
+// When you select a block in the blockarea and press a key, this function is called
+// Used for indenting/unindenting/deleting
 void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
 {
     if(event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab) {
@@ -110,24 +128,6 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
     }
 }
 
-bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
-{
-    // whight: for now, this always creates blocks in the current nest
-    BaseModule* module = BaseRegistry::createInstance(blockType);
-    module->setFixedWidth(COL_WIDTH);
-    connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
-    int desiredRowSpan = 1, desiredColSpan = 1;
-    int col = 0;
-
-
-    if(m_layout->count() != 0)
-    {
-        moveBlocksDown(module_location);
-    }
-    m_layout->addWidget(module, module_location, col, desiredRowSpan, desiredColSpan);
-    return true;
-}
-
 //Moves all blocks down 1 space starting from module location
 void BlockArea::moveBlocksDown(int module_location)
 {
@@ -143,6 +143,7 @@ void BlockArea::moveBlocksDown(int module_location)
         m_layout->addWidget(prevWidget, module_location + 1, getCol(rowToCol, module_location), desiredRowSpan, desiredColSpan);
     }
 }
+
 //Moves all blocks down 1 space starting at start and stops before end
 void BlockArea::moveBlocksDownUntil(int start, int end)
 {
@@ -156,6 +157,7 @@ void BlockArea::moveBlocksDownUntil(int start, int end)
         m_layout->addWidget(prevWidget, start + 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
 }
+
 /* Moves blocks upwards in the layout by 1 space starting at start
  * and ending at end. */
 void BlockArea::moveBlocksUp(int start, int end)
@@ -179,6 +181,7 @@ void BlockArea::moveBlocksUp(int start, int end)
         m_layout->addWidget(prevWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }
 }
+
 //Starts unindenting blocks BELOW the start row.
 void BlockArea::unIndentBlocks(int start)
 {
@@ -205,22 +208,26 @@ void BlockArea::unIndentBlocks(int start)
         m_layout->addWidget(nextWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
     }*/
 }
+
 QGridLayout* BlockArea::getLayout()
 {
     return m_layout;
 }
+
 //Necessary for dragMoveEvent and drop event
 void BlockArea::dragEnterEvent(QDragEnterEvent *event)
 {
       event->acceptProposedAction();
       QScrollArea::dragEnterEvent(event);
 }
+
 void BlockArea::dragLeaveEvent(QDragLeaveEvent *event)
 {
     if(line != nullptr)
         line->setGeometry(0,0,0,0);
     QScrollArea::dragLeaveEvent(event);
 }
+
 //Given the y coordinate of the mouse, figures out which row you should insert the block to
 int BlockArea::mouseCoordToModuleLocation(int yCoord) {
     int moduleLocation = 0;
@@ -267,6 +274,7 @@ void BlockArea::dragMoveEvent(QDragMoveEvent *event)
         line = new QFrame(m_layout->parentWidget());
     }
 }
+
 //Takes the dropped block and inserts into the right spot based on mouse position. Also removes indicator afterwards.
 void BlockArea::dropEvent(QDropEvent *event)
 {
