@@ -1,0 +1,22 @@
+Installation:
+1) Download the appropriate zip file according to your operating system from our github releases page: https://github.com/Colecf/Dunes/releases/tag/1.0
+2) Double click on either Dunes.app (Mac), Dunes.exe (Windows), or AppRun (Linux)
+
+User Manual:
+1) Click options, set your node path and npm path. These are your installations of NodeJS and NPM, so that Dunes can run your script.
+2) Double-click or drag modules from the list on the left into the big blank area in the middle. This adds a block into the block area, and is how you build a script. You can single click on a block to see its description.
+3) Edit the block's configuration options within the block area.
+4) You can click a block within the block area, and hit tab or shift-tab to indent or unindent, respectively. Delete or backspace will delete a block.
+5) You can drag blocks within the block area to reorder them. Note this does not handle indentation.
+6) You can click the save button to save the block diagram that you've created, so that you can load it later on.
+7) You can click the Generate button to save the generated NodeJS script, so you can use it outside of Dunes.
+8) Alternatively, you can hit the Run Code button to immediately run the NodeJS script, and save the resulting CSV somewhere. 
+9) When clicking Generate or Run Code, we will ask for where to save the resulting CSV file that is generated when running the NodeJS script. 
+
+Brief Language Overview:
+
+Blocks receive input from what is known as the "input stream". The output of each block is the input stream to the next block. Blocks that don't output anything do not affect the input stream. 
+
+If, while, scope, and foreach blocks operate on the blocks indented underneath them. It is a known bug (that is documented in our working prototype pdf) that you can indent blocks under other blocks besides these as well. 
+
+All other language features are explained in the block descriptions.
