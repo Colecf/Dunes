@@ -21,10 +21,19 @@ UnittestTest::UnittestTest()
 void UnittestTest::testDownloadModuleGetCodeAndGetConfig()
 {
     DownloadModule* mod = new DownloadModule;
-    mod->urlBox->setText("asdf");
     mod->inputTypeDropDown->setCurrentIndex(0);
+    mod->urlBox->setText("asdf");
 
     QString result("get_page(\"asdf\");\n");
+    QCOMPARE(mod->getCode(), result);
+
+    mod->inputTypeDropDown->setCurrentIndex(1);
+    result = QString("get_page(top());\n");
+    QCOMPARE(mod->getCode(), result);
+
+    mod->inputTypeDropDown->setCurrentIndex(2);
+    mod->urlBox->setText("asdf");
+    result = QString("get_page(\"asdf\");\n");
     QCOMPARE(mod->getCode(), result);
 }
 
