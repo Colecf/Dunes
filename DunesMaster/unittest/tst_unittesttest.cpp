@@ -1,5 +1,7 @@
 #include <QString>
 #include <QtTest>
+#define TESTING
+#include "../Dunes/modules/downloadmodule.h"
 
 class UnittestTest : public QObject
 {
@@ -9,18 +11,23 @@ public:
     UnittestTest();
 
 private Q_SLOTS:
-    void testCase1();
+    void testDownloadModuleGetCodeAndGetConfig();
 };
 
 UnittestTest::UnittestTest()
 {
 }
 
-void UnittestTest::testCase1()
+void UnittestTest::testDownloadModuleGetCodeAndGetConfig()
 {
-    QVERIFY2(true, "Failure");
+    DownloadModule* mod = new DownloadModule;
+    mod->urlBox->setText("asdf");
+    mod->inputTypeDropDown->setCurrentIndex(0);
+
+    QString result("get_page(\"asdf\");\n");
+    QCOMPARE(mod->getCode(), result);
 }
 
-QTEST_APPLESS_MAIN(UnittestTest)
+QTEST_MAIN(UnittestTest)
 
 #include "tst_unittesttest.moc"
