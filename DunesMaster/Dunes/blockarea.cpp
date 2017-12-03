@@ -23,7 +23,7 @@ BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 
     setAcceptDrops(true);
 }
-
+//Creates a block and adds it to the end of the block area
 bool BlockArea::createBlock(ModuleType blockType)
 {
     // whight: for now, this always creates blocks in the current nest
@@ -102,14 +102,11 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
         m_layout->getItemPosition(m_layout->indexOf(mod), &row, &col, &rowSpan, &colSpan);
         m_layout->removeWidget(mod);
         mod->setParent(NULL);
-        /*int currentCol = getCol(rowToCol, index);
-        int childCol = getCol(rowToCol, index + 1);
-        if(currentCol < childCol)
-            unIndentBlocks(index);*/
+
         moveBlocksUp(row+1, -1);
     }
 }
-
+//Moves all blocks starting at module location down and inserts a new block at module location
 bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
 {
     // whight: for now, this always creates blocks in the current nest
@@ -196,14 +193,6 @@ void BlockArea::unIndentBlocks(int start)
         start++;
         nextCol = getCol(rowToCol, start);
     }
-    /*for(; start <= end; start++)
-    {
-        int col = getCol(rowToCol, start);
-        if(col < 0)
-            return;
-        nextWidget = m_layout->itemAtPosition(start, col)->widget();
-        m_layout->addWidget(nextWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
-    }*/
 }
 QGridLayout* BlockArea::getLayout()
 {
@@ -215,6 +204,7 @@ void BlockArea::dragEnterEvent(QDragEnterEvent *event)
       event->acceptProposedAction();
       QScrollArea::dragEnterEvent(event);
 }
+//Removes the indicator if the dragging leaves the block area.
 void BlockArea::dragLeaveEvent(QDragLeaveEvent *event)
 {
     if(line != nullptr)

@@ -4,7 +4,7 @@
 ModuleList::ModuleList(QWidget *parent) : QListWidget(parent)
 {
 }
-
+//Accepts left clicks onto the module list to select a module.
 void ModuleList::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

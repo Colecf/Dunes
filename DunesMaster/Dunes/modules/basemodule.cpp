@@ -28,7 +28,7 @@ BaseModule::BaseModule()
 BaseModule::~BaseModule() {
     //TODO maybe delete title label and other widgets?
 }
-
+//Gets the position of where the mouse is clicked. Used for dragging
 void BaseModule::mousePressEvent(QMouseEvent* event)
 {
     if(event->button() == Qt::LeftButton)
@@ -36,7 +36,7 @@ void BaseModule::mousePressEvent(QMouseEvent* event)
         dragStartPosition = event->pos();
     }
 }
-
+//Gets the index of the block in the block area to be dragged.
 void BaseModule::mouseMoveEvent(QMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
