@@ -11,7 +11,7 @@ void ModuleList::mousePressEvent(QMouseEvent *event)
            dragStartPosition = event->pos();
     QListWidget::mousePressEvent(event);
 }
-
+//Checks if the mouse is dragging an item and if it is gets the items type and index to create the block.
 void ModuleList::mouseMoveEvent(QMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
