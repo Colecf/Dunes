@@ -17,6 +17,7 @@ SaveLoad::SaveLoad(BlockArea *blockarea)
     m_blockarea = blockarea;
 }
 
+// Loops over each block in the layout and writes its configuration to a line
 QString SaveLoad::genSaveData()
 {
     QString saveData = "";
@@ -53,7 +54,6 @@ void SaveLoad::save()
 
 void SaveLoad::load()
 {
-
     QString fileName = QFileDialog::getOpenFileName(m_blockarea,
         tr("Open Dunes Project"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),
         tr("Dunes Project (*.dunes);;All Files (*)"));
@@ -66,17 +66,22 @@ void SaveLoad::load()
             QRegularExpression re("((\\w+)=(.*?))*;");
             QString data = "";
             QTextStream in(&file);
+            // Loop through each line in the file
             while(!in.atEnd()) {
                 BaseModule* module = nullptr;
                 data = in.readLine();
                 qInfo() << data << endl;
                 QRegularExpressionMatchIterator matchIter = re.globalMatch(data);
+                // Loop through all matches on the line
                 while(matchIter.hasNext()) {
                     QRegularExpressionMatch match = matchIter.next();
+                    // Type is assumed to be the first match
                     if(match.captured(2) == "type") {
+                        // Skip over the next match, column, create the block
                         QRegularExpressionMatch colMatch = matchIter.next();
                         module = m_blockarea->createBlock((ModuleType)match.captured(3).toInt(), colMatch.captured(3).toInt());
                     } else {
+                        // Every match after column is an option to be configured
                         if (module != nullptr) {
                             module->setConfig(match.captured(2), match.captured(3));
                         }

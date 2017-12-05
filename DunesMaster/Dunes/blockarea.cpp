@@ -23,7 +23,7 @@ BlockArea::BlockArea(QWidget *parent) : QScrollArea(parent)
 
     setAcceptDrops(true);
 }
-
+//Creates a block and adds it to the end of the block area
 bool BlockArea::createBlock(ModuleType blockType)
 {
     BaseModule* module = BaseRegistry::createInstance(blockType);
@@ -41,23 +41,6 @@ BaseModule* BlockArea::createBlock(ModuleType blockType, int col)
     connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
     m_layout->addWidget(module, m_layout->count(), col, 1, 1);
     return module;
-}
-
-bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
-{
-    BaseModule* module = BaseRegistry::createInstance(blockType);
-    module->setFixedWidth(COL_WIDTH);
-    connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
-    int desiredRowSpan = 1, desiredColSpan = 1;
-    int col = 0;
-
-
-    if(m_layout->count() != 0)
-    {
-        moveBlocksDown(module_location);
-    }
-    m_layout->addWidget(module, module_location, col, desiredRowSpan, desiredColSpan);
-    return true;
 }
 
 // When you select a block in the blockarea and press a key, this function is called
@@ -120,14 +103,28 @@ void BlockArea::keyPressedInModule(BaseModule* mod, QKeyEvent* event)
         m_layout->getItemPosition(m_layout->indexOf(mod), &row, &col, &rowSpan, &colSpan);
         m_layout->removeWidget(mod);
         mod->setParent(NULL);
-        /*int currentCol = getCol(rowToCol, index);
-        int childCol = getCol(rowToCol, index + 1);
-        if(currentCol < childCol)
-            unIndentBlocks(index);*/
+
         moveBlocksUp(row+1, -1);
     }
 }
+//Moves all blocks starting at module location down and inserts a new block at module location
+bool BlockArea::createBlockAt(ModuleType blockType, int module_location)
+{
+    // whight: for now, this always creates blocks in the current nest
+    BaseModule* module = BaseRegistry::createInstance(blockType);
+    module->setFixedWidth(COL_WIDTH);
+    connect(module, SIGNAL(keyPressed(BaseModule*, QKeyEvent*)), this, SLOT(keyPressedInModule(BaseModule*, QKeyEvent*)));
+    int desiredRowSpan = 1, desiredColSpan = 1;
+    int col = 0;
 
+
+    if(m_layout->count() != 0)
+    {
+        moveBlocksDown(module_location);
+    }
+    m_layout->addWidget(module, module_location, col, desiredRowSpan, desiredColSpan);
+    return true;
+}
 //Moves all blocks down 1 space starting from module location
 void BlockArea::moveBlocksDown(int module_location)
 {
@@ -199,14 +196,6 @@ void BlockArea::unIndentBlocks(int start)
         start++;
         nextCol = getCol(rowToCol, start);
     }
-    /*for(; start <= end; start++)
-    {
-        int col = getCol(rowToCol, start);
-        if(col < 0)
-            return;
-        nextWidget = m_layout->itemAtPosition(start, col)->widget();
-        m_layout->addWidget(nextWidget, start - 1, getCol(rowToCol, start), desiredRowSpan, desiredColSpan);
-    }*/
 }
 
 QGridLayout* BlockArea::getLayout()
@@ -220,7 +209,7 @@ void BlockArea::dragEnterEvent(QDragEnterEvent *event)
       event->acceptProposedAction();
       QScrollArea::dragEnterEvent(event);
 }
-
+//Removes the indicator if the dragging leaves the block area.
 void BlockArea::dragLeaveEvent(QDragLeaveEvent *event)
 {
     if(line != nullptr)

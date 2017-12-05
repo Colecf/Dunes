@@ -15,7 +15,7 @@
 #include "modules/setvariablemodule.h"
 #include "modules/getvariablemodule.h"
 #include "modulelistitem.h"
-
+//Initilizes the UI
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
