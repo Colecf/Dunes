@@ -52,8 +52,16 @@ QString CodeGen::generateCode(){
     QString code = "";
     // Create mapping from row to column, do this instead of row to module because we can't get col from module
     auto rowToCol = m_blockarea->createRowToCol();
-    // Stack of every parent-block's row (while, if, scope, foreach). Get the block via casting a widget w/ itemAtPosition
+
     QGridLayout *m_layout = m_blockarea->getLayout();
+
+    // Clear all children
+    for(const std::pair<int, int>& p : *rowToCol) {
+        BaseModule* mod = (BaseModule*)m_layout->itemAtPosition(p.first, p.second)->widget();
+        mod->children.clear();
+    }
+
+    // Stack of every parent-block's row (while, if, scope, foreach). Get the block via casting a widget w/ itemAtPosition
     std::stack<int> *parentRowStack = new std::stack<int>;
     for(int row = 0; row < m_layout->count(); row++){
         int col;
